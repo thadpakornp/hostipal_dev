@@ -20,7 +20,7 @@ Route::group(['prefix' => 'v1', 'as' => 'v1.'], function () {
         Route::group(['prefix' => 'users', 'as' => 'users.'], function () {
             Route::get('/profile', ['as' => 'profile', 'uses' => 'Api\UserController@getProfile']);
             Route::get('/get', ['as' => 'get', 'uses' => 'Api\UserController@getUser']);
-            Route::put('/updated', ['as' => 'updated', 'uses' => 'Api\UserController@updated']);
+            Route::post('/updated', ['as' => 'updated', 'uses' => 'Api\UserController@updated']);
         });
 
         Route::group(['prefix' => 'charts', 'as' => 'charts.'], function () {
@@ -28,6 +28,8 @@ Route::group(['prefix' => 'v1', 'as' => 'v1.'], function () {
             Route::post('/uploaded', ['as' => 'uploaded', 'uses' => 'Api\ChartsController@uploaded']);
             Route::post('/stored', ['as' => 'stored', 'uses' => 'Api\ChartsController@stored']);
             Route::post('/descriptions', ['as' => 'descriptions', 'uses' => 'Api\ChartsController@descriptions']);
+            Route::post('/descriptions/success', ['as' => 'descriptions.success', 'uses' => 'Api\ChartsController@success']);
+            Route::post('/descriptions/deleted', ['as' => 'descriptions.deleted', 'uses' => 'Api\ChartsController@deleted']);
             Route::post('/files', ['as' => 'files', 'uses' => 'Api\ChartsController@files']);
         });
 
@@ -41,5 +43,3 @@ Route::group(['prefix' => 'v1', 'as' => 'v1.'], function () {
         });
     });
 });
-
-

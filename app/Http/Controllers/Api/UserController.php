@@ -8,6 +8,8 @@ use App\Http\Resources\User as UserResource;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 use Auth;
+use File;
+use App\Classes\Resize;
 
 class UserController extends Controller
 {
@@ -84,11 +86,26 @@ class UserController extends Controller
 
     public function updated(Request $request)
     {
-        $validator = Validator::make($request->all(), [
-            'id' => 'required'
-        ], [
-            'id.required' => 'กรุณาระบุไอดีที่ต้องการแก้ไข'
-        ]);
+        $validator = Validator::make(
+            $request->all(),
+            [
+                'prefix_id' => ['required'],
+                'name' => ['required', 'string', 'max:255'],
+                'surname' => ['required', 'string', 'max:255'],
+                'phone' => ['required', 'string', 'max:10'],
+            ],
+            [
+                'prefix_id.required' => 'โปรดเลือกคำนำหน้า',
+                'name.required' => 'กรุณาระบุชื่อ',
+                'name.string' => 'รูปแบบข้อมูลของชื่อไม่ถูกต้อง',
+                'name.max' => 'ชื่อยาวเกินไป',
+                'surname.required' => 'กรุณาระบุนามสกุล',
+                'surname.string' => 'รูปแบบข้อมูลของนามสกุลไม่ถูกต้อง',
+                'surname.max' => 'นามสกุลยาวเกินไป',
+                'phone.required' => 'กรุณาระบุเบอร์โทรติดต่อ',
+                'phone.max' => 'เบอร์โทรติดต่อยาวเกินไป',
+            ]
+        );
         if ($validator->fails()) {
             return response()->json([
                 'code' => '100',
@@ -96,26 +113,25 @@ class UserController extends Controller
             ]);
         }
 
-        if(Auth::user()->type == 'User'){
-            if(Auth::user()->id != $request->input('id')){
-                return response()->json([
-                    'code' => '107',
-                    'data' => 'ไม่อนุญาตให้แก้ไขข้อมูล'
-                ]);
+        $user = User::find(Auth::user()->id);
+        $user->prefix_id = $request->input('prefix_id');
+        $user->name = $request->input('name');
+        $user->surname = $request->input('surname');
+        $user->phone = $request->input('phone');
+
+        if ($request->hasFile('profile')) {
+            if ($user->profile != NULL || $user->profile != '') {
+                File::delete(public_path('assets/img/profiles/' . $user->profile));
+                File::delete(public_path('assets/img/avatars/' . $user->profile));
             }
+
+            $profile = time() . '.' . $request->file('profile')->extension();
+            $request->file('profile')->move(public_path('assets/img/profiles'), $profile);
+            Resize::Profile($profile);
+            $user->profile = $profile;
         }
 
-        if(Auth::user()->type == 'Admin'){
-            $user_required = User::find($request->input('id'));
-            if($user_required->type == 'Owner'){
-                return response()->json([
-                    'code' => '107',
-                    'data' => 'ไม่อนุญาตให้แก้ไขข้อมูล'
-                ]);
-            }
-        }
-
-        if (User::find($request->input('id'))->update($request->all())) {
+        if ($user->save()) {
             $code = '200';
             $description = 'แก้ไขข้อมูลเรียบร้อยแล้ว';
         } else {
