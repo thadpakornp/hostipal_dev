@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Api;
 
 use App\Classes\Resize;
 use App\Http\Controllers\Controller;
-use App\Http\Resources\Chart;
 use App\Http\Resources\Chart as ChartResource;
 use App\Http\Resources\ChartsDate;
 use App\Http\Resources\ChartsDescriptionResource;
@@ -32,25 +31,27 @@ class ChartsController extends Controller
 
     public function descriptions(Request $request)
     {
-        if($request->input('last_id')){
+        if ($request->input('last_id')) {
             $last = Charts::find($request->input('last_id'));
         } else {
-            $last = Charts::where('id',$request->input('charts_id'))->whereNull('deleted_at')->orderBy('id','desc')->first();
+            $last = Charts::where('id', $request->input('charts_id'))->whereNull('deleted_at')->orderBy('id', 'desc')->first();
         }
         return response()->json([
             'code' => '200',
             'data' => [
-                'charts_status' => Charts::where('id',$last->id)->whereNull('deleted_at')->orderBy('created_at','desc')->get(['status']),
-                'charts_date' => ChartsDate::collection(Charts::where('idcard',$last->idcard)->whereNull('deleted_at')->orderBy('created_at','desc')->get(['id','created_at'])),
-                'lasted' => ChartsDescriptionResource::collection(Charts_description::where('charts_id',$last->id)->whereNull('deleted_at')->orderBy('created_at','desc')->get()),
+                'charts_info' => ChartResource::make($last),
+                'charts_status' => Charts::where('id', $last->id)->whereNull('deleted_at')->orderBy('created_at', 'desc')->get(['status']),
+                'charts_date' => ChartsDate::collection(Charts::where('idcard', $last->idcard)->whereNull('deleted_at')->orderBy('created_at', 'desc')->get(['id', 'created_at'])),
+                'lasted' => ChartsDescriptionResource::collection(Charts_description::where('charts_id', $last->id)->whereNull('deleted_at')->orderBy('created_at', 'desc')->get()),
             ],
         ]);
     }
 
-    public function files(Request $request){
+    public function files(Request $request)
+    {
         return response()->json([
             'code' => '200',
-            'data' => Charts_files::whereNull('deleted_at')->where('charts_desc_id',$request->input('charts_desc_id'))->count() > 0 ? ChartsFilesResource::collection(Charts_files::whereNull('deleted_at')->where('charts_desc_id',$request->input('charts_desc_id'))->get()) : null
+            'data' => Charts_files::whereNull('deleted_at')->where('charts_desc_id', $request->input('charts_desc_id'))->count() > 0 ? ChartsFilesResource::collection(Charts_files::whereNull('deleted_at')->where('charts_desc_id', $request->input('charts_desc_id'))->get()) : null
         ]);
     }
 
@@ -64,7 +65,7 @@ class ChartsController extends Controller
         ]);
 
         if ($description) {
-            if($request->hasFile('files')){
+            if ($request->hasFile('files')) {
                 foreach ($request->file('files') as $file) {
                     $imageName = date('Ymd') . Str::random(8) . time() . '.' . $file->getClientOriginalExtension();
                     $file->move(public_path('assets/img/photos'), $imageName);
@@ -80,7 +81,7 @@ class ChartsController extends Controller
                         'type_files' => $file->getClientOriginalExtension()
                     ]);
                 }
-           }
+            }
             return response()->json([
                 'code' => '200',
                 'data' => 'บันทึกข้อมูลเรียบร้อยแล้ว'
@@ -103,7 +104,7 @@ class ChartsController extends Controller
         ]);
 
         if ($description) {
-            if($request->hasFile('files')){
+            if ($request->hasFile('files')) {
                 foreach ($request->file('files') as $file) {
                     $imageName = date('Ymd') . Str::random(8) . time() . '.' . $file->getClientOriginalExtension();
                     $file->move(public_path('assets/img/photos'), $imageName);
@@ -135,7 +136,7 @@ class ChartsController extends Controller
     public function success(Request $request)
     {
         $charts = Charts::find($request->input('id'));
-        if(empty($charts)){
+        if (empty($charts)) {
             return response()->json([
                 'code' => '101',
                 'data' => 'เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้ง'
@@ -188,16 +189,16 @@ class ChartsController extends Controller
                 ]);
             }
             $charts->deleted_at = Carbon::now();
-                if ($charts->save()) {
-                    return response()->json([
-                        'code' => '200',
-                        'data' => 'บันทึกข้อมูลเรียบร้อยแล้ว'
-                    ]);
-                }
+            if ($charts->save()) {
+                return response()->json([
+                    'code' => '200',
+                    'data' => 'บันทึกข้อมูลเรียบร้อยแล้ว'
+                ]);
+            }
         }
-            return response()->json([
-                'code' => '404',
-                'data' => 'ไม่อนุญาตให้ดำเนินการ'
-            ]);
+        return response()->json([
+            'code' => '404',
+            'data' => 'ไม่อนุญาตให้ดำเนินการ'
+        ]);
     }
 }

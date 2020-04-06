@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use Auth;
 use File;
 use App\Classes\Resize;
+use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
@@ -141,6 +142,46 @@ class UserController extends Controller
         return response()->json([
             'code' => $code,
             'data' => $description
+        ]);
+    }
+
+    public function password(Request $request)
+    {
+        $user = User::find(Auth::user()->id);
+        if (empty($user)) {
+            return response()->json([
+                'code' => '101',
+                'data' => 'ไม่พบข้อมูล'
+            ]);
+        }
+        if (!password_verify($request->input('oldPassword'), $user->password)) {
+            return response()->json([
+                'code' => '101',
+                'data' => 'รหัสผ่านเดิมไม่ถูกต้อง'
+            ]);
+        }
+        if ($request->input('newPassword1') != $request->input('newPassword2')) {
+            return response()->json([
+                'code' => '101',
+                'data' => 'รหัสผ่านใหม่ 2 ช่องไม่ตรงกัน'
+            ]);
+        }
+        if (password_verify($request->input('newPassword1'), $user->password)) {
+            return response()->json([
+                'code' => '101',
+                'data' => 'ไม่สามารถเปลี่ยนรหัสผ่านที่เป็นรหัสเดิมได้'
+            ]);
+        }
+        $user->password = Hash::make($request->input('newPassword1'));
+        if (!$user->save()) {
+            return response()->json([
+                'code' => '101',
+                'data' => 'เปลี่ยนรหัสผ่านล้มเหลว'
+            ]);
+        }
+        return response()->json([
+            'code' => '200',
+            'data' => 'เปลี่ยนรหัสผ่านเรียบร้อยแล้ว'
         ]);
     }
 }

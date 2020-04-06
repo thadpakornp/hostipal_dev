@@ -18,6 +18,7 @@ Route::group(['prefix' => 'v1', 'as' => 'v1.'], function () {
 
     Route::group(['middleware' => ['user.api', 'auth:api', 'activity.log']], function () {
         Route::group(['prefix' => 'users', 'as' => 'users.'], function () {
+            Route::post('/password', ['as' => 'password', 'uses' => 'Api\UserController@password']);
             Route::get('/profile', ['as' => 'profile', 'uses' => 'Api\UserController@getProfile']);
             Route::get('/get', ['as' => 'get', 'uses' => 'Api\UserController@getUser']);
             Route::post('/updated', ['as' => 'updated', 'uses' => 'Api\UserController@updated']);
