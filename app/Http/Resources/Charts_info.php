@@ -30,12 +30,12 @@ class Charts_info extends JsonResource
         return [
             'id' => $this->id,
             'hn' => $this->hn,
-            'prefix' => PrefixModel::where('code',$this->prefix_id)->first()->name ?? '',
+            'prefix' => PrefixModel::where('code', $this->prefix_id)->first()->name ?? '',
             'name' => $this->name,
             'surname' => $this->surname,
             'address' => $this->address,
             'phone' => $this->phone,
-            'profile' => asset('assets/img/profiles/' . $this->profile),
+            'profile' => $this->profile == null ? asset('assets/img/avatars/avatar1.jpg') : asset('assets/img/profiles/' . $this->profile),
             'status' => $this->status,
         ];
     }
