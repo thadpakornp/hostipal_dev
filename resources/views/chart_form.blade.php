@@ -149,8 +149,9 @@
                                         <table class="table table-hover table-bordered table-responsive" width="100%">
                                             <thead>
                                             <th width="5%">เลือก</th>
-                                            <th width="50%">รายละเอียด</th>
-                                            <th width="25%" class="text-center">ผู้บันทึก</th>
+                                            <th width="45%">รายละเอียด</th>
+                                            <th width="10%" class="text-center">อยู่ที่</th>
+                                            <th width="20%" class="text-center">ผู้บันทึก</th>
                                             <th width="20%" class="text-center">วันที่และเวลา</th>
                                             </thead>
                                             <tbody>
@@ -227,7 +228,7 @@
                     var time = dt.getTime();
                     return d + time + file.name;
                 },
-                acceptedFiles: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel,audio/wav,application/vnd.openxmlformats-officedocument.presentationml.presentation,application/vnd.ms-powerpoint,application/pdf,image/png,image/jpeg,image/gif,text/csv,image/bmp,audio/mpeg,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,video/x-flv,video/mp4',
+                acceptedFiles: 'image/png,image/jpeg,image/gif,image/bmp,video/mov,video/mp4',
                 addRemoveLinks: true,
                 timeout: 5000,
                 removedfile: function (file) {

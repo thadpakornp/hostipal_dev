@@ -91,8 +91,8 @@
                                         <div id="address-map-container" style="width:100%;height:400px;">
                                             <div style="width: 100%; height: 100%" id="address-map"></div>
                                         </div>
-                                        <input id="latformHRML" value="13.7245601" type="hidden">
-                                        <input id="longformHRML" value="100.4930264" type="hidden">
+                                        <input id="latformHRML" value="13.744674" type="hidden">
+                                        <input id="longformHRML" value="100.5633683" type="hidden">
                                     </div>
                                 </div>
                             </div>

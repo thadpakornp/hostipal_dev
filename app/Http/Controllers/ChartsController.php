@@ -189,8 +189,8 @@ class ChartsController extends Controller
             'charts_id' => $charts_id,
             'description' => $request->input('description'),
             'add_by_user' => Auth::user()->id,
-            'g_location_lat' => $request->input('g_location_lat_charts_desc'),
-            'g_location_long' => $request->input('g_location_long_charts_desc')
+            'g_location_lat' => $request->input('g_location_lat') == '13.744674' ? null : $request->input('g_location_lat'),
+            'g_location_long' => $request->input('g_location_long') == '100.5633683' ? null : $request->input('g_location_long')
         ]);
         if ($desc) {
             if ($request->hasFile('files')) {
@@ -323,9 +323,9 @@ class ChartsController extends Controller
 
         $html .= '<div class="form-group">
                               เลือกหลายไฟล์โดยการกด Ctrl <font class="text-danger">(เฉพาะไฟล์
-                                .doc,.docx,.xls,.xlsx,.csv,.pdf,.png,.jpeg,.jpg,.gif,.bmp,.mp3,.mp4,.mov,.mpg,.mpeg,.avi)</font>
+                                .png,.jpeg,.gif,.jpg,.bmp,.mov,.mp4)</font>
                             <input type="file" name="files[]" multiple class="form-control"
-                                   accept=".doc,.docx,.xls,.xlsx,.csv,.pdf,.png,.jpeg,.gif,.jpg,.bmp,.mp3,.mp4,.mov,.mpg,.mpeg,.avi">
+                                   accept=".png,.jpeg,.gif,.jpg,.bmp,.mov,.mp4">
                         </div>
                      </div>
                      <div class="col-sm-12">
@@ -450,7 +450,7 @@ class ChartsController extends Controller
                     }
                 }
 
-                $table .= '</td><td class="text-center">' . $add_by . '</td><td class="text-center">' . FormatThai::DateThai($chart->created_at) . '</td></tr>';
+                $table .= '</td><td class="text-center"><a target="_blank" href="http://maps.google.com/?q=' .$chart->g_location_lat.','.$chart->g_location_long.'">' .$chart->g_location_lat.' '.$chart->g_location_long.'</a></td><td class="text-center">' . $add_by . '</td><td class="text-center">' . FormatThai::DateThai($chart->created_at) . '</td></tr>';
             }
         } else {
             $table = '<tr><td class="text-center text-danger" colspan="4">ไม่พบข้อมูล</td></tr>';

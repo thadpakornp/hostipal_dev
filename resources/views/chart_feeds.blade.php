@@ -106,10 +106,24 @@
                                 <input type="hidden" name="charts_id" value="{{ encrypt($user->id) }}">
                                 <textarea type="text" name="description" rows="3" class="form-control"></textarea><br/>
                                 เลือกหลายไฟล์โดยการกด Ctrl <font class="text-danger">(เฉพาะไฟล์
-                                    .doc,.docx,.xls,.xlsx,.csv,.pdf,.png,.jpeg,.jpg,.gif,.bmp,.mp3,.mp4,.mov,.mpg,.mpeg,.avi)</font>
+                                    .png,.jpeg,.gif,.jpg,.bmp,.mov,.mp4)</font>
                                 <input type="file" name="files[]" multiple class="form-control"
-                                       accept=".doc,.docx,.xls,.xlsx,.csv,.pdf,.png,.jpeg,.gif,.jpg,.bmp,.mp3,.mp4,.mov,.mpg,.mpeg,.avi">
+                                       accept=".png,.jpeg,.gif,.jpg,.bmp,.mov,.mp4">
                                 <br/>
+                                <a type="button" class="btn btn-group btn-block btn-danger" onclick="check_in();">เช็คอิน (ระบบไม่บันทึกค่าเช็คอินพื้นฐานที่ถูกกำหนดตั้งแต่ต้น)</a><br/>
+                                <div id="check-in" style="display: none">
+                                    <br/>
+                                    <input type="text" id="address-input" name="address_address"
+                                           class="form-control map-input">
+                                    <input type="hidden" name="g_location_lat" id="address-latitude" value="0"/>
+                                    <input type="hidden" name="g_location_long" id="address-longitude"
+                                           value="0"/>
+                                    <div id="address-map-container" style="width:100%;height:400px;">
+                                        <div style="width: 100%; height: 100%" id="address-map"></div>
+                                    </div>
+                                    <input id="latformHRML" value="13.744674" type="hidden">
+                                    <input id="longformHRML" value="100.5633683" type="hidden">
+                                </div><br/>
                                 <button type="submit" class="btn btn-group btn-block btn-primary">บันทึก</button>
                             </form>
                         </div>
@@ -152,7 +166,7 @@
                                     </div>
                                     <div class="push-5-t">
                                         <font
-                                            class="font-w600">{{ $desc->username->prefix->name }} {{ $desc->username->name }} {{ $desc->username->surname }}</font><br>
+                                            class="font-w600">{{ $desc->username->prefix->name }} {{ $desc->username->name }} {{ $desc->username->surname }} @if($desc->g_location_lat != null && $desc->g_location_long != null) อยู่ที่ <a href="{{ "http://maps.google.com/?q=" . $desc->g_location_lat .",".$desc->g_location_long."" }}" target="_blank"> {{ $desc->g_location_lat }} {{ $desc->g_location_long }} </a> @endif</font><br>
                                         <span class="font-s12 text-muted">
                                           {{ App\Helpers\FormatThai::DateThai($desc->created_at) }}
                                         </span>
@@ -162,9 +176,12 @@
                             <div class="block-content block-content-full">
                                 <p class="push-10 pull-t">{{ $desc->description }}</p>
                                 @php
-                                    $files = App\Models\Charts_files::where('charts_desc_id',$desc->id)->whereNull('deleted_at')->get();
+                                    $files = App\Models\Charts_files::where('charts_desc_id',$desc->id)->whereNull('deleted_at');
                                 @endphp
-                                @if(!empty($files))
+                                @if($files->count() > 0)
+                                    @php
+                                    $files = $files->get();
+                                    @endphp
                                     <div class="row js-gallery">
                                         @foreach($files as $file)
                                             @if($file->deleted_at == NULL)
@@ -215,7 +232,15 @@
                                             @endif
                                         @endif
                                     @endforeach
-
+                                @else
+                                    @if($desc->g_location_lat != null && $desc->g_location_long != null)
+                                        <iframe
+                                            width="100%"
+                                            height="450"
+                                            frameborder="0" style="border:0"
+                                            src="https://www.google.com/maps/embed/v1/place?key={{ config('app.GOOGLE_MAPS_API_KEY') }}&q={{ $desc->g_location_lat }},{{ $desc->g_location_long }}" allowfullscreen>
+                                        </iframe>
+                                    @endif
                                 @endif
                             </div>
                         </div>
@@ -258,7 +283,19 @@
 @section('script')
     <script src="{{ asset('assets/js/plugins/magnific-popup/magnific-popup.min.js') }}"></script>
     <script src="https://cdn.plyr.io/3.5.10/plyr.js"></script>
+    <script
+        src="https://maps.googleapis.com/maps/api/js?key={{ config('app.GOOGLE_MAPS_API_KEY') }}&libraries=places&callback=initialize"
+        async defer></script>
+    <script src="{{ asset('assets/js/mapInput.js') }}"></script>
     <script type="text/javascript">
+        function check_in(){
+            if($('#check-in').css('display') == 'none'){
+                $('#check-in').show();
+            } else {
+                $('#check-in').hide();
+            }
+        }
+
         function clickSuccess(id) {
             Swal.fire({
                 title: 'ยืนยัน?',

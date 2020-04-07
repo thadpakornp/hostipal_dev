@@ -6,6 +6,7 @@ namespace App\Http\Controllers\Api;
 use App\Classes\Resize;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Chart as ChartResource;
+use App\Http\Resources\Charts_info;
 use App\Http\Resources\ChartsDate;
 use App\Http\Resources\ChartsDescriptionResource;
 use App\Http\Resources\ChartsFilesResource;
@@ -39,7 +40,7 @@ class ChartsController extends Controller
         return response()->json([
             'code' => '200',
             'data' => [
-                'charts_info' => ChartResource::make($last),
+                'charts_info' => Charts_info::make($last),
                 'charts_status' => Charts::where('id', $last->id)->whereNull('deleted_at')->orderBy('created_at', 'desc')->get(['status']),
                 'charts_date' => ChartsDate::collection(Charts::where('idcard', $last->idcard)->whereNull('deleted_at')->orderBy('created_at', 'desc')->get(['id', 'created_at'])),
                 'lasted' => ChartsDescriptionResource::collection(Charts_description::where('charts_id', $last->id)->whereNull('deleted_at')->orderBy('created_at', 'desc')->get()),
