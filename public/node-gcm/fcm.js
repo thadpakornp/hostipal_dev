@@ -10,10 +10,10 @@ var message = new gcm.Message({
         icon: "ic_launcher",
         body: "This is a notification that will be displayed if your app is in the background."
     },
-    data: { key1: 'msg1' }
+    data: { key: '20' }
 });
 
-var regTokens = ['ca6XGgYCSAE:APA91bH_aGyQ43H19-0UGjX7CV1AfSshBdyo8oDUPjtFCd9FGavqCNv5hfg5pVXrg1K1ALKHkm0ZKy1EiahfCwM15Ktd90fy2UCL48Zo0I8700DQUDMzrZI8eEKakOd6AXfiPXr26Pr-'];
+var regTokens = ['f35-603xXiQ:APA91bGXsWAez25K7JOb-KoN5LHuCOYIVqJq1sSVemug2qlEXbWZthH17PqO0JUCXQgH81xRSz87TnLOjOhXwY5Ln0NJ1dkczTjAkyzYUQj0GYRLH6Yib8dflwZwqGbFDQtB97Ws9owV'];
 
 sender.send(message, { registrationTokens: regTokens }, function (err, response) {
     if (err) console.error(err);
