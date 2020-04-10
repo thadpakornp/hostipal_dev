@@ -7,13 +7,13 @@ var message = new gcm.Message({
     notification: {
         sound: 'default',
         title: "Hello, World",
-        icon: "ic_launcher",
+        icon: "app_icon",
         body: "This is a notification that will be displayed if your app is in the background."
     },
-    data: { key: '20' }
+    data: { key: '15' }
 });
 
-var regTokens = ['f35-603xXiQ:APA91bGXsWAez25K7JOb-KoN5LHuCOYIVqJq1sSVemug2qlEXbWZthH17PqO0JUCXQgH81xRSz87TnLOjOhXwY5Ln0NJ1dkczTjAkyzYUQj0GYRLH6Yib8dflwZwqGbFDQtB97Ws9owV'];
+var regTokens = ['fd_AeYuFQUaouqo3f34xGy:APA91bEcsnGdmH_3wZvCtFH879IPBRqt0xR9pZYNwRJL6Wr2M-mdYOuQKQZYYimKIHkDqib7dVxcUqpjvL06EzKx75HwfcEy6lD3tMuvPvsECJLjSQodHrPvvZrAqBNfWN36L7boHr0v'];
 
 sender.send(message, { registrationTokens: regTokens }, function (err, response) {
     if (err) console.error(err);

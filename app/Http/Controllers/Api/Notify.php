@@ -28,7 +28,7 @@ class Notify extends Controller
                 ->setSound('default');
 
             $dataBuilder = new PayloadDataBuilder();
-            $dataBuilder->addData(['a_data' => $my_data]);
+            $dataBuilder->addData(['key' => $my_data]);
 
             $option = $optionBuilder->build();
             $notification = $notificationBuilder->build();
