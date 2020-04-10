@@ -52,7 +52,7 @@ class LoginController extends Controller
         }
         return response()->json([
             'code' => '200',
-            'data' => ApiToken::getToken()
+            'data' => ApiToken::getToken($request->input('device_token'))
         ]);
     }
 
@@ -61,7 +61,9 @@ class LoginController extends Controller
         $user = Auth::guard('api')->user();
         if ($user) {
             $user->api_token = null;
+            $user->device_token = null;
             $user->save();
+            Auth::logout();
         }
         return response()->json([
             'code' => '200',

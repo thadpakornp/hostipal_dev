@@ -1,5 +1,4 @@
 <?php
-
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -57,7 +56,7 @@ Route::group(['prefix' => 'backend', 'as' => 'backend.', 'middleware' => ['auth'
         Route::get('/get/data/app', ['as' => 'data.app', 'uses' => 'ChartsController@datafromApp']);
         Route::get('/get/{id}/files/show', ['as' => 'file.show', 'uses' => 'ChartsController@showFiles']);
         Route::post('/i_check', ['as' => 'i.check', 'uses' => 'ChartsController@iCheck']);
-        Route::post('/success/chart',['as' => 'success.chart' , 'uses' => 'ChartsController@successChart']);
+        Route::post('/success/chart', ['as' => 'success.chart', 'uses' => 'ChartsController@successChart']);
     });
 
     //Manage

@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Events\ActivateChart;
 use App\Helpers\FormatThai;
+use App\Http\Controllers\Api\Notify;
 use App\Http\Requests\DescriptionRequest;
+use App\Models\User;
 use Auth;
 use App\Classes\Resize;
 use App\Http\Requests\ChartRequest;
@@ -160,8 +161,20 @@ class ChartsController extends Controller
                 if ($request->session()->has('upload_id')) {
                     Charts_files::whereIn('id', $request->session()->get('upload_id'))->update(['charts_id' => $chart->id, 'charts_desc_id' => $chart_desc->id]);
                 }
-                $this->evenChart('A', $chart->id, Auth::user()->id);
-                return redirect()->back()->with(['success' => 'เพิ่มข้อมูลผู้ป่วยรายใหม่เรียบร้อยแล้ว']);
+                //sent notify to web
+                $notify_web = new Notify();
+                $notify_web->sentNotifyWeb(Auth::user()->id, 'Activate', 'คุณ' . $request->input('name') . ' ' . $request->input('surname') . ' สร้างประวัติแล้ว', route('backend.charts.feeds', encrypt($chart->idcard)));
+
+                // sent notify to app
+                $device_token = User::whereNotNull('device_token');
+                if ($device_token->count() > 0) {
+                    foreach ($device_token->get(['device_token']) as $dt) {
+                        $notify_app = new Notify();
+                        $notify_app->sentNotifyDevice('Activate', 'คุณ' . $request->input('name') . ' ' . $request->input('surname') . ' สร้างประวัติแล้ว', $dt->device_token, $chart->id);
+                    }
+                }
+
+                return redirect()->back()->with(['success' => 'สร้างประวัติแล้วเรียบร้อยแล้ว']);
             } else {
                 return redirect()->back()->with(['error' => 'ไม่สามารถสร้างรายละเอียดได้']);
             }
@@ -170,16 +183,6 @@ class ChartsController extends Controller
         }
     }
 
-    public
-    function evenChart($status, $id = NULL)
-    {
-        if ($status == 'A') {
-            $url = route('backend.charts.feeds', encrypt($id));
-        } else {
-            $url = route('backend.charts.users');
-        }
-        event(new ActivateChart($status, $url, $id));
-    }
 
     public
     function descrtipionStored(DescriptionRequest $request)
@@ -211,6 +214,22 @@ class ChartsController extends Controller
                     ]);
                 }
             }
+
+
+            $charts_Desc = Charts_description::where('add_by_user', '<>', Auth::user()->id)->whereNull('deleted_at')->where('charts_id', $charts_id)->distinct('add_by_user')->get(['add_by_user']);
+            if (!empty($charts_Desc)) {
+                foreach ($charts_Desc as $cd) {
+                    $charts = Charts::find($charts_id, ['idcard', 'name', 'surname']);
+                    $notify_web = new Notify();
+                    $notify_web->sentNotifyWeb(Auth::user()->id, 'Description', 'คุณ' . $charts->name . ' ' . $charts->surname . ' ถูกบันทึกรายละเอียดเพิ่มเติม', route('backend.charts.feed', encrypt($charts_id)));
+                    $device_token = User::find($cd->add_by_user, ['device_token']);
+                    if ($device_token->device_token != null) {
+                        $notify_app = new Notify();
+                        $notify_app->sentNotifyDevice('Description', 'คุณ' . $charts->name . ' ' . $charts->surname . ' ถูกบันทึกรายละเอียดเพิ่มเติม', $device_token->device_token, $charts_id);
+                    }
+                }
+            }
+
             return redirect()->back()->with(['success' => 'บันทึกข้อมูลเรียบร้อยแล้ว']);
         } else {
             return redirect()->back()->with(['error' => 'ไม่สามารถบันทึกข้อมูลได้']);
@@ -333,7 +352,6 @@ class ChartsController extends Controller
                      </div>
                   </div></form>';
         return $html;
-
     }
 
     public
@@ -450,7 +468,7 @@ class ChartsController extends Controller
                     }
                 }
 
-                $table .= '</td><td class="text-center"><a target="_blank" href="http://maps.google.com/?q=' .$chart->g_location_lat.','.$chart->g_location_long.'">' .$chart->g_location_lat.' '.$chart->g_location_long.'</a></td><td class="text-center">' . $add_by . '</td><td class="text-center">' . FormatThai::DateThai($chart->created_at) . '</td></tr>';
+                $table .= '</td><td class="text-center"><a target="_blank" href="http://maps.google.com/?q=' . $chart->g_location_lat . ',' . $chart->g_location_long . '">' . $chart->g_location_lat . ' ' . $chart->g_location_long . '</a></td><td class="text-center">' . $add_by . '</td><td class="text-center">' . FormatThai::DateThai($chart->created_at) . '</td></tr>';
             }
         } else {
             $table = '<tr><td class="text-center text-danger" colspan="4">ไม่พบข้อมูล</td></tr>';
@@ -474,7 +492,6 @@ class ChartsController extends Controller
             } else {
                 return response()->download(public_path() . '/assets/img/photos/' . $file->files);
             }
-
         } else {
             return '<font color="red"><center><h2>ไม่พบข้อมูล</h2></center></font>';
         }

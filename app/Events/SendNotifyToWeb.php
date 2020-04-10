@@ -10,19 +10,21 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class ActivateChart implements ShouldBroadcast
+class SendNotifyToWeb implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    public $url;
-    public $status;
     public $id;
+    public $title;
+    public $content;
+    public $action;
 
-    public function __construct($status, $url, $id)
+    public function __construct($id, $title, $content, $action)
     {
-        $this->status = $status;
-        $this->url = $url;
         $this->id = $id;
+        $this->title = $title;
+        $this->content = $content;
+        $this->action = $action;
     }
 
     public function broadcastOn()

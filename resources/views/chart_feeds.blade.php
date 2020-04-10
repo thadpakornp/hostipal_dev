@@ -3,6 +3,12 @@
 @section('css')
     <link rel="stylesheet" href="{{ asset('assets/js/plugins/magnific-popup/magnific-popup.min.css') }}">
     <link rel="stylesheet" href="https://cdn.plyr.io/3.5.10/plyr.css"/>
+    <style type="text/css">
+        .scroll-y {
+            height: 400px;
+            overflow-y: scroll;
+        }
+    </style>
 @endsection
 @section('content')
     <div class="content content-boxed">
@@ -79,7 +85,7 @@
                 <div class="block">
                     <div class="block-content">
                         <div class="font-w600 font-s12 text-uppercase text-muted push-10">ประวัติการรักษา</div>
-                        <ul class="nav nav-pills nav-stacked font-s13 push">
+                        <ul class="nav nav-pills nav-stacked font-s13 push scroll-y">
                             @foreach($users as $u)
                                 <li @if($u->id == $user->id) class="active" @endif>
                                     <a href="{{ route('backend.charts.feed', encrypt($u->id)) }}"><font

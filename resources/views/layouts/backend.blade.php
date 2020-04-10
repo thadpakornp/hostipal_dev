@@ -1,7 +1,9 @@
 <!DOCTYPE html>
 <!--[if IE 9]>         <html class="ie9 no-focus" lang="{{ config('app.locale') }}"> <![endif]-->
 <!--[if gt IE 9]><!-->
-<html class="no-focus" lang="{{ config('app.locale') }}"> <!--<![endif]-->
+<html class="no-focus" lang="{{ config('app.locale') }}">
+<!--<![endif]-->
+
 <head>
     <meta charset="utf-8">
 
@@ -22,12 +24,26 @@
     <link rel="stylesheet" id="css-main" href="{{ asset('assets/css/oneui.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/js/plugins/sweetalert2/sweetalert2.min.css') }}">
 
-@yield('css')
-
-<!-- You can include a specific file from css/themes/ folder to alter the default color theme of the template. eg: -->
-    <!-- <link rel="stylesheet" id="css-theme" href="assets/css/themes/flat.min.css"> -->
-    <!-- END Stylesheets -->
+    @yield('css')
+    <link rel="apple-touch-icon" sizes="57x57" href="{{ asset('apple-icon-57x57.png') }}">
+    <link rel="apple-touch-icon" sizes="60x60" href="{{ asset('apple-icon-60x60.png') }}">
+    <link rel="apple-touch-icon" sizes="72x72" href="{{ asset('apple-icon-72x72.png') }}">
+    <link rel="apple-touch-icon" sizes="76x76" href="{{ asset('apple-icon-76x76.png') }}">
+    <link rel="apple-touch-icon" sizes="114x114" href="{{ asset('apple-icon-114x114.png') }}">
+    <link rel="apple-touch-icon" sizes="120x120" href="{{ asset('apple-icon-120x120.png') }}">
+    <link rel="apple-touch-icon" sizes="144x144" href="{{ asset('apple-icon-144x144.png') }}">
+    <link rel="apple-touch-icon" sizes="152x152" href="{{ asset('apple-icon-152x152.png') }}">
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('apple-icon-180x180.png') }}">
+    <link rel="icon" type="image/png" sizes="192x192" href="{{ asset('android-icon-192x192.png') }}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('favicon-32x32.png') }}">
+    <link rel="icon" type="image/png" sizes="96x96" href="{{ asset('favicon-96x96.png"') }}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('favicon-16x16.png') }}">
+    <link rel="manifest" href="{{ asset('manifest.json') }}">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="msapplication-TileImage" content="{{ asset('ms-icon-144x144.png') }}">
+    <meta name="theme-color" content="#ffffff">
 </head>
+
 <body>
 <div id="page-container" class="sidebar-l side-scroll header-navbar-fixed">
     <!-- Side Overlay-->
@@ -41,8 +57,8 @@
                         data-action="side_overlay_close">
                     <i class="fa fa-times"></i>
                 </button>
-                <span
-                    class="font-w600">{{ Auth::user()->prefix->name }} {{ Auth::user()->name }} {{ Auth::user()->surname }}</span>
+                <span class="font-w600">{{ Auth::user()->prefix->name }} {{ Auth::user()->name }}
+                    {{ Auth::user()->surname }}</span>
             </div>
             <!-- END Side Header -->
 
@@ -53,14 +69,16 @@
                     <div class="block-header bg-gray-lighter">
                         <ul class="block-options">
                             <li>
-                                <button type="button" data-toggle="block-option" data-action="content_toggle"></button>
+                                <button type="button" data-toggle="block-option"
+                                        data-action="content_toggle"></button>
                             </li>
                         </ul>
                         <h3 class="block-title" style="font-family: 'Sarabun', sans-serif;">บัญชีผู้ใช้งาน</h3>
                     </div>
                     <div class="block-content">
-                        <form class="js-validation-update form-horizontal" action="{{ route('backend.users.updated') }}"
-                              method="post" enctype="multipart/form-data">
+                        <form class="js-validation-update form-horizontal"
+                              action="{{ route('backend.users.updated') }}" method="post"
+                              enctype="multipart/form-data">
                             @csrf
                             <div class="form-group">
                                 <div class="col-xs-12">
@@ -74,8 +92,8 @@
                                             @if(Auth::user()->type == 'User') disabled="true" @endif>
                                         <option value="">โปรดเลือกสถานพยายาล</option>
                                         @foreach($hospitals as $hospital)
-                                            <option value="{{ $hospital->id }}"
-                                                    @if(Auth::user()->office_id == $hospital->id) selected @endif>{{ $hospital->name }}</option>
+                                            <option value="{{ $hospital->id }}" @if(Auth::user()->office_id ==
+                                                $hospital->id) selected @endif>{{ $hospital->name }}</option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -83,10 +101,11 @@
                             <div class="form-group">
                                 <div class="col-xs-12">
                                     <label for="bd-qsettings-name">คำนำหน้า</label>
-                                    <select name="prefix_id" size="1" class="form-control select2" id="prefix" required>
+                                    <select name="prefix_id" size="1" class="form-control select2" id="prefix"
+                                            required>
                                         @foreach($prefixs as $prefix)
-                                            <option value="{{ $prefix->code }}"
-                                                    @if(Auth::user()->prefix_id == $prefix->code) selected @endif>{{ $prefix->name }}</option>
+                                            <option value="{{ $prefix->code }}" @if(Auth::user()->prefix_id ==
+                                                $prefix->code) selected @endif>{{ $prefix->name }}</option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -170,7 +189,8 @@
                 <li class="js-header-search header-search remove-margin">
                     <form class="form-horizontal" action="{{ route('backend.search') }}" method="post">
                         @csrf
-                        <div class="form-material form-material-primary input-group remove-margin-t remove-margin-b">
+                        <div
+                            class="form-material form-material-primary input-group remove-margin-t remove-margin-b">
                             <input class="form-control" type="text" id="base-material-text" name="input_search"
                                    placeholder="Search..">
                             <span class="input-group-addon"><i class="si si-magnifier"></i></span>
@@ -223,21 +243,21 @@
                             <i class="fa fa-briefcase push-5-r"></i>ข้อมูลผู้ป่วย <span class="caret"></span>
                         </a>
                         <ul class="dropdown-menu">
-                            <li @if(Request::segment(3) == null) class="active" @endif>
+                            <li @if(Request::segment(3)==null) class="active" @endif>
                                 <a href="{{ route('backend.charts.index') }}">ลงทะเบียนผู้ป่วย</a>
                             </li>
-                            <li @if(Request::segment(3) == 'users') class="active" @endif>
+                            <li @if(Request::segment(3)=='users' ) class="active" @endif>
                                 <a href="{{ route('backend.charts.users') }}">ระเบียนผู้ป่วย</a>
                             </li>
                         </ul>
                     </li>
                     @if(Auth::user()->type != 'User')
-                        <li @if(Request::segment(2) == 'users') class="active" @endif>
+                        <li @if(Request::segment(2)=='users' ) class="active" @endif>
                             <a href="{{ route('backend.users.index') }}">
                                 <i class="fa fa-users push-5-r"></i>จัดการผู้ใช้งาน
                             </a>
                         </li>
-                        <li @if(Request::segment(2) == 'manage') class="active" @endif>
+                        <li @if(Request::segment(2)=='manage' ) class="active" @endif>
                             <a href="{{ route('backend.manage.index') }}">
                                 <i class="fa fa-cog push-5-r"></i>จัดการสถานพยาบาล
                             </a>
@@ -292,7 +312,9 @@
 @yield('script')
 <script type="text/javascript">
     jQuery(function () {
-        Pusher.logToConsole = true;
+        Notification.requestPermission();
+
+        Pusher.logToConsole = false;
 
         var pusher = new Pusher("{{ config('broadcasting.connections.pusher.key') }}", {
             cluster: 'ap1',
@@ -303,31 +325,27 @@
         channel.bind('chart-event', function (data) {
             //alert(JSON.stringify(data));
             //console.log(data);
-            var UserID = '{{ Auth::user()->id }}';
-            if (data.id != UserID) {
-                var text = '';
-                if (data.status == 'A') {
-                    text = 'ACTIVATE ผู้ป่วยรายใหม่แล้ว';
-                } else {
-                    text = 'พบข้อมูลผู้ป่วยรอลงทะเบียน';
-                }
-                Swal.fire({
-                    type: 'success',
-                    title: text,
-                    text: 'ต้องการตรวจสอบไหม?',
-                    confirmButtonText: 'ตกลง',
-                    showCancelButton: true,
-                    confirmButtonColor: '#3085d6',
-                    cancelButtonColor: '#d33',
-                    confirmButtonText: 'ตรวจสอบ',
-                    cancelButtonText: 'ยกเลิก'
-                }).then((result) => {
-                    if (result.value) {
-                        window.location.assign(data.url);
+            Notification.requestPermission().then(function (result) {
+                if (result == "granted") {
+                    var img = "{{ asset('ms-icon-144x144.png') }}";
+                    var dataID = data.id;
+                    var dataTitle = data.title;
+                    var dataContent = data.content;
+                    var dataAction = data.action;
+                    var UserID = '{{ Auth::user()->id }}';
+
+                    if (dataID != UserID) {
+                        var notify = new Notification(dataTitle, {body: dataContent, icon: img});
+                        notify.onclick = function(event) {
+                            event.preventDefault(); // prevent the browser from focusing the Notification's tab
+                            window.open(dataAction, '_blank');
+                        }
+                        setTimeout(notify.close.bind(notify), 7000);
                     }
-                });
-            }
+                }
+            });
         });
+
 
         $('#prefix').select2();
 
@@ -396,4 +414,5 @@
     @endif
 </script>
 </body>
+
 </html>

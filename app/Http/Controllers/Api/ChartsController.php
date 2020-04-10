@@ -13,6 +13,7 @@ use App\Http\Resources\ChartsFilesResource;
 use App\Models\Charts;
 use App\Models\Charts_description;
 use App\Models\Charts_files;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Auth;
 use Carbon\Carbon;
@@ -61,8 +62,8 @@ class ChartsController extends Controller
         $description = Charts_description::create([
             'description' => $request->input('description'),
             'add_by_user' => Auth::user()->id,
-            'g_location_lat' => $request->input('g_location_lat'),
-            'g_location_long' => $request->input('g_location_long')
+            'g_location_lat' => $request->input('g_location_lat') == 'null' ? null : $request->input('g_location_lat'),
+            'g_location_long' => $request->input('g_location_long') == 'null' ? null : $request->input('g_location_long')
         ]);
 
         if ($description) {
@@ -100,8 +101,8 @@ class ChartsController extends Controller
             'charts_id' => $request->input('id'),
             'description' => $request->input('description'),
             'add_by_user' => Auth::user()->id,
-            'g_location_lat' => $request->input('g_location_lat'),
-            'g_location_long' => $request->input('g_location_long')
+            'g_location_lat' => $request->input('g_location_lat') == 'null' ? null : $request->input('g_location_lat'),
+            'g_location_long' => $request->input('g_location_long') == 'null' ? null : $request->input('g_location_long')
         ]);
 
         if ($description) {
@@ -123,6 +124,7 @@ class ChartsController extends Controller
                     ]);
                 }
             }
+
             return response()->json([
                 'code' => '200',
                 'data' => 'บันทึกข้อมูลเรียบร้อยแล้ว'
@@ -151,8 +153,6 @@ class ChartsController extends Controller
             'charts_id' => $charts->id,
             'description' => 'สิ้นสุดการรักษาหรือกระบวนการรักษาเสร็จสิ้นแล้ว',
             'add_by_user' => Auth::user()->id,
-            'g_location_lat' => $request->input('g_location_lat_charts_desc'),
-            'g_location_long' => $request->input('g_location_long_charts_desc')
         ]);
 
         return response()->json([
@@ -201,5 +201,26 @@ class ChartsController extends Controller
             'code' => '404',
             'data' => 'ไม่อนุญาตให้ดำเนินการ'
         ]);
+    }
+
+    public function sentNotifyWeb(){
+       $notify_web = new Notify();
+       $notify_web->sentNotifyWeb(Auth::user()->id, 'New content', 'ระบบได้รับการบันทึกข้อมูลใหม่จากโมบาย', route('backend.charts.index'));
+    }
+
+    public function sentNotifyWebAndMobile(Request $request){
+        $charts_Desc = Charts_description::where('add_by_user', '<>', Auth::user()->id)->whereNull('deleted_at')->where('charts_id', $request->input('id'))->distinct('add_by_user')->get(['add_by_user']);
+        if (!empty($charts_Desc)) {
+            foreach ($charts_Desc as $cd) {
+                $charts = Charts::find($request->input('id'),['idcard','name','surname']);
+                $notify_web = New Notify();
+                $notify_web->sentNotifyWeb(Auth::user()->id, 'Description', 'คุณ' . $charts->name . ' ' . $charts->surname . ' ถูกบันทึกรายละเอียดเพิ่มเติม', route('backend.charts.feed', encrypt($request->input('id'))));
+                $device_token = User::find($cd->add_by_user, ['device_token']);
+                if ($device_token->device_token != null) {
+                    $notify_app = new Notify();
+                    $notify_app->sentNotifyDevice('Description', 'คุณ' . $charts->name . ' ' . $charts->surname . ' ถูกบันทึกรายละเอียดเพิ่มเติม', $device_token->device_token, $request->input('id'));
+                }
+            }
+        }
     }
 }
