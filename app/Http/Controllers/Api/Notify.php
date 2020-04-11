@@ -28,7 +28,7 @@ class Notify extends Controller
                 ->setSound('default');
 
             $dataBuilder = new PayloadDataBuilder();
-            $dataBuilder->addData(['key' => $my_data]);
+            $dataBuilder->addData(['click_action' => 'FLUTTER_NOTIFICATION_CLICK' ,'key' => $my_data]);
 
             $option = $optionBuilder->build();
             $notification = $notificationBuilder->build();
