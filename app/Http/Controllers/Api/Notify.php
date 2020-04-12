@@ -27,8 +27,9 @@ class Notify extends Controller
                 ->setIcon('ic_launcher')
                 ->setSound('default');
 
+
             $dataBuilder = new PayloadDataBuilder();
-            $dataBuilder->addData(['click_action' => 'FLUTTER_NOTIFICATION_CLICK' ,'key' => $my_data]);
+            $dataBuilder->addData(['click_action' => 'FLUTTER_NOTIFICATION_CLICK', 'id' => $my_data, 'status' => 'done']);
 
             $option = $optionBuilder->build();
             $notification = $notificationBuilder->build();
