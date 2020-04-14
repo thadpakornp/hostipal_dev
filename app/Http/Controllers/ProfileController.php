@@ -447,4 +447,9 @@ class ProfileController extends Controller {
         }
     }
 
+    public function logoutonweb(Request $request){
+        Auth::logout();
+        return response()->json(['success' => 'ออกจากระบบเรียบร้อยแล้ว','redirect'=> route('login')], 200);
+    }
+
 }

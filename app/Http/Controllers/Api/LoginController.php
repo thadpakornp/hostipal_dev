@@ -7,6 +7,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Auth;
+use App\Models\User;
+use Illuminate\Support\Facades\Hash;
 
 class LoginController extends Controller
 {
@@ -26,34 +28,42 @@ class LoginController extends Controller
                 'data' => $validator->messages()->first()
             ]);
         }
-        $credentials = [
-            'email' => $request->input('email'),
-            'password' => $request->input('password'),
-        ];
-        if (!Auth::attempt($credentials)) {
+
+        $user = User::where('email',$request->input('email'))->first();
+
+        if ($user) {
+            if(Hash::check($request->input('password'),$user->password)){
+                if($user->type == 'User'){
+                    if($user->chart_id != null && $user->status != 'Active'){
+                        return response()->json([
+                            'code' => '101',
+                            'data' => 'อีเมลนี้ไม่พร้อมใช้งาน'
+                        ]);
+                    }
+                }
+
+                if ($user->deleted_at != NULL) {
+                    return response()->json([
+                        'code' => '101',
+                        'data' => 'ไม่พบข้อมูลในระบบ'
+                    ]);
+                }
+                return response()->json([
+                    'code' => '200',
+                    'data' => ApiToken::getToken($user->id,$request->input('device_token'))
+                ]);
+            } else {
+                return response()->json([
+                    'code' => '101',
+                    'data' => 'อีเมลหรือรหัสผ่านไม่ถูกต้อง'
+                ]);
+            }
+        } else {
             return response()->json([
                 'code' => '101',
                 'data' => 'อีเมลหรือรหัสผ่านไม่ถูกต้อง'
             ]);
-        }
-        if (Auth::user()->type == 'User') {
-            if (Auth::user()->chart_id != NULL && Auth::user()->status != 'Active') {
-                return response()->json([
-                    'code' => '101',
-                    'data' => 'อีเมลนี้ไม่พร้อมใช้งาน'
-                ]);
-            }
-        }
-        if (Auth::user()->deleted_at != NULL) {
-            return response()->json([
-                'code' => '101',
-                'data' => 'ไม่พบข้อมูลในระบบ'
-            ]);
-        }
-        return response()->json([
-            'code' => '200',
-            'data' => ApiToken::getToken($request->input('device_token'))
-        ]);
+            }    
     }
 
     public function logout(Request $request)
@@ -63,7 +73,6 @@ class LoginController extends Controller
             $user->api_token = null;
             $user->device_token = null;
             $user->save();
-            Auth::logout();
         }
         return response()->json([
             'code' => '200',

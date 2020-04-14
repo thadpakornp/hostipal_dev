@@ -31,6 +31,7 @@ Route::group(['prefix' => 'backend', 'as' => 'backend.', 'middleware' => ['auth'
         Route::post('/details', ['as' => 'details', 'uses' => 'ProfileController@details']);
         Route::post('/approved', ['as' => 'approved', 'uses' => 'ProfileController@approved']);
         Route::post('/rejected', ['as' => 'rejected', 'uses' => 'ProfileController@rejected']);
+        Route::post('/logoutonweb', ['as'=>'logoutonweb','uses'=>'ProfileController@logoutonweb']);
     });
 
     //Charts

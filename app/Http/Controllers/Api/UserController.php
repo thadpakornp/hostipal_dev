@@ -16,9 +16,9 @@ class UserController extends Controller
 {
     public function getProfile(Request $request)
     {
-        if (Auth::user()->type == 'User') {
+        if (Auth::guard('api')->user()->type == 'User') {
             if ($request->input('id')) {
-                if (Auth::user()->id != $request->input('id')) {
+                if (Auth::guard('api')->user()->id != $request->input('id')) {
                     return response()->json([
                         'code' => '107',
                         'data' => 'ไม่อนุญาตให้เข้าถึงข้อมูล'
@@ -26,7 +26,7 @@ class UserController extends Controller
                 }
             }
         }
-        if (Auth::user()->type == 'Admin') {
+        if (Auth::guard('api')->user()->type == 'Admin') {
             if ($request->input('id')) {
                 if (User::find($request->input('id'))->type == 'Owner') {
                     return response()->json([
@@ -34,7 +34,7 @@ class UserController extends Controller
                         'data' => 'ไม่อนุญาตให้เข้าถึงข้อมูล'
                     ]);
                 }
-                if (User::find($request->input('id'))->office_id != Auth::user()->office_id) {
+                if (User::find($request->input('id'))->office_id != Auth::guard('api')->user()->office_id) {
                     return response()->json([
                         'code' => '107',
                         'data' => 'ไม่อนุญาตให้เข้าถึงข้อมูล'
@@ -44,7 +44,7 @@ class UserController extends Controller
         }
 
         if ($request->input('id') == null || $request->input('id') == '') {
-            $user = UserResource::make(User::find(Auth::user()->id));
+            $user = UserResource::make(User::find(Auth::guard('api')->user()->id));
         } else {
             $user = UserResource::make(User::find($request->input('id')));
         }
@@ -64,13 +64,13 @@ class UserController extends Controller
 
     public function getUser()
     {
-        if (Auth::user()->type == 'User') {
+        if (Auth::guard('api')->user()->type == 'User') {
             return response()->json([
                 'code' => '107',
                 'data' => 'ไม่อนุญาตให้เข้าถึงข้อมูล'
             ]);
         }
-        $users = UserResource::collection(User::where('id', '<>', Auth::user()->id)->whereNull('deleted_at')->GetAll());
+        $users = UserResource::collection(User::where('id', '<>', Auth::guard('api')->user()->id)->whereNull('deleted_at')->GetAll());
         if (empty($users)) {
             return response()->json([
                 'code' => '200',
@@ -114,7 +114,7 @@ class UserController extends Controller
             ]);
         }
 
-        $user = User::find(Auth::user()->id);
+        $user = User::find(Auth::guard('api')->user()->id);
         $user->prefix_id = $request->input('prefix_id');
         $user->name = $request->input('name');
         $user->surname = $request->input('surname');
@@ -147,7 +147,7 @@ class UserController extends Controller
 
     public function password(Request $request)
     {
-        $user = User::find(Auth::user()->id);
+        $user = User::find(Auth::guard('api')->user()->id);
         if (empty($user)) {
             return response()->json([
                 'code' => '101',

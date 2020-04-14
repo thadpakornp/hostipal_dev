@@ -61,7 +61,7 @@ class ChartsController extends Controller
     {
         $description = Charts_description::create([
             'description' => $request->input('description'),
-            'add_by_user' => Auth::user()->id,
+            'add_by_user' => Auth::guard('api')->user()->id,
             'g_location_lat' => $request->input('g_location_lat') == 'null' ? null : $request->input('g_location_lat'),
             'g_location_long' => $request->input('g_location_long') == 'null' ? null : $request->input('g_location_long')
         ]);
@@ -78,7 +78,7 @@ class ChartsController extends Controller
 
                     Charts_files::create([
                         'charts_desc_id' => $description->id,
-                        'add_by_user' => Auth::user()->id,
+                        'add_by_user' => Auth::guard('api')->user()->id,
                         'files' => $imageName,
                         'type_files' => $file->getClientOriginalExtension()
                     ]);
@@ -100,7 +100,7 @@ class ChartsController extends Controller
         $description = Charts_description::create([
             'charts_id' => $request->input('id'),
             'description' => $request->input('description'),
-            'add_by_user' => Auth::user()->id,
+            'add_by_user' => Auth::guard('api')->user()->id,
             'g_location_lat' => $request->input('g_location_lat') == 'null' ? null : $request->input('g_location_lat'),
             'g_location_long' => $request->input('g_location_long') == 'null' ? null : $request->input('g_location_long')
         ]);
@@ -118,7 +118,7 @@ class ChartsController extends Controller
                     Charts_files::create([
                         'charts_id' => $request->input('id'),
                         'charts_desc_id' => $description->id,
-                        'add_by_user' => Auth::user()->id,
+                        'add_by_user' => Auth::guard('api')->user()->id,
                         'files' => $imageName,
                         'type_files' => $file->getClientOriginalExtension()
                     ]);
@@ -152,7 +152,7 @@ class ChartsController extends Controller
         Charts_description::create([
             'charts_id' => $charts->id,
             'description' => 'สิ้นสุดการรักษาหรือกระบวนการรักษาเสร็จสิ้นแล้ว',
-            'add_by_user' => Auth::user()->id,
+            'add_by_user' => Auth::guard('api')->user()->id,
         ]);
 
         return response()->json([
@@ -164,7 +164,7 @@ class ChartsController extends Controller
     public function deleted(Request $request)
     {
         $charts = Charts_description::find($request->input('id'));
-        if (Auth::user()->type == 'Owner' || $charts->add_by_user == Auth::user()->id) {
+        if (Auth::guard('api')->user()->type == 'Owner' || $charts->add_by_user == Auth::guard('api')->user()->id) {
             $files = Charts_files::where('charts_desc_id', $charts->id);
             if ($files->count() > 0) {
                 $file = Charts_files::where('charts_desc_id', $charts->id)->update(['deleted_at' => Carbon::now()]);
@@ -205,16 +205,16 @@ class ChartsController extends Controller
 
     public function sentNotifyWeb(){
        $notify_web = new Notify();
-       $notify_web->sentNotifyWeb(Auth::user()->id, 'New content', 'ระบบได้รับการบันทึกข้อมูลใหม่จากโมบาย', route('backend.charts.index'));
+       $notify_web->sentNotifyWeb(Auth::guard('api')->user()->id, 'New content', 'ระบบได้รับการบันทึกข้อมูลใหม่จากโมบาย', route('backend.charts.index'));
     }
 
     public function sentNotifyWebAndMobile(Request $request){
-        $charts_Desc = Charts_description::where('add_by_user', '<>', Auth::user()->id)->whereNull('deleted_at')->where('charts_id', $request->input('id'))->distinct('add_by_user')->get(['add_by_user']);
+        $charts_Desc = Charts_description::where('add_by_user', '<>', Auth::guard('api')->user()->id)->whereNull('deleted_at')->where('charts_id', $request->input('id'))->distinct('add_by_user')->get(['add_by_user']);
         if (!empty($charts_Desc)) {
             foreach ($charts_Desc as $cd) {
                 $charts = Charts::find($request->input('id'),['idcard','name','surname']);
                 $notify_web = New Notify();
-                $notify_web->sentNotifyWeb(Auth::user()->id, 'Description', 'คุณ' . $charts->name . ' ' . $charts->surname . ' ถูกบันทึกรายละเอียดเพิ่มเติม', route('backend.charts.feed', encrypt($request->input('id'))));
+                $notify_web->sentNotifyWeb(Auth::guard('api')->user()->id, 'Description', 'คุณ' . $charts->name . ' ' . $charts->surname . ' ถูกบันทึกรายละเอียดเพิ่มเติม', route('backend.charts.feed', encrypt($request->input('id'))));
                 $device_token = User::find($cd->add_by_user, ['device_token']);
                 if ($device_token->device_token != null) {
                     $notify_app = new Notify();

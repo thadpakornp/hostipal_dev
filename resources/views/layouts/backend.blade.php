@@ -366,7 +366,7 @@
             if (result.value) {
                 $.ajax({
                     type: "POST",
-                    url: "{{ route('logout') }}",
+                    url: "{{ route('backend.users.logoutonweb') }}",
                     data: {"_token": "{{ csrf_token() }}"},
                     success: function (res) {
                         $(location).attr('href', res.redirect);

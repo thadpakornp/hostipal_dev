@@ -6,18 +6,19 @@ namespace App\Classes;
 
 use Illuminate\Support\Str;
 use Auth;
+use App\Models\User;
 
 class ApiToken
 {
-    public static function getToken($device_token)
+    public static function getToken($userid, $device_token)
     {
-        $token = Str::random(60);
+        $token = Str::random(250);
 
-        Auth::user()->forceFill([
+        User::find($userid)->forceFill([
             'api_token' => hash('sha256', $token),
             'device_token' => $device_token,
         ])->save();
-        Auth::guard('api')->user();
+
         return $token;
     }
 }
