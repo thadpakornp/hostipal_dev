@@ -14,6 +14,22 @@ use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
+
+    public function token(Request $request)
+    {
+        $user = $request->user();
+        if($user){
+            return response()->json([
+                'code' => '200',
+                'data' => 'สำเร็จ'
+            ]);
+        }
+        return response()->json([
+            'code' => '101',
+            'data' => 'ล้มเหลว'
+        ]);
+    }
+
     public function getProfile(Request $request)
     {
         if (Auth::guard('api')->user()->type == 'User') {

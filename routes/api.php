@@ -15,6 +15,7 @@ Route::group(['prefix' => 'v1', 'as' => 'v1.'], function () {
     Route::post('forget', ['as' => 'forget', 'uses' => 'Api\ForgotController']);
     Route::post('login', ['as' => 'login', 'uses' => 'Api\LoginController@login']);
     Route::post('logout', ['as' => 'logout', 'uses' => 'Api\LoginController@logout']);
+    
 
     Route::group(['middleware' => ['user.api', 'auth:api', 'activity.log']], function () {
         Route::group(['prefix' => 'users', 'as' => 'users.'], function () {
@@ -22,6 +23,7 @@ Route::group(['prefix' => 'v1', 'as' => 'v1.'], function () {
             Route::get('/profile', ['as' => 'profile', 'uses' => 'Api\UserController@getProfile']);
             Route::get('/get', ['as' => 'get', 'uses' => 'Api\UserController@getUser']);
             Route::post('/updated', ['as' => 'updated', 'uses' => 'Api\UserController@updated']);
+            Route::post('token', ['as' => 'token', 'uses' => 'Api\UserController@token']);
         });
 
         Route::group(['prefix' => 'charts', 'as' => 'charts.'], function () {
