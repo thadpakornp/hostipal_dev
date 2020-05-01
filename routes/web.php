@@ -9,6 +9,9 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
+Route::get('policy', function() {
+    return view('policy');
+});
 Route::get('/', function () {
     return redirect()->route('backend.index');
 });

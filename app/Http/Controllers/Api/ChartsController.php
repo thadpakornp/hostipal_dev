@@ -24,7 +24,7 @@ class ChartsController extends Controller
 {
     public function users()
     {
-        $users = Charts::orderBy('status', 'asc')->Charts();
+        $users = Charts::orderBy('status', 'asc')->orderBy('updated_at','desc')->Charts();
         return response()->json([
             'code' => '200',
             'data' => ChartResource::collection($users)
