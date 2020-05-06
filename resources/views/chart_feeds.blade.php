@@ -163,6 +163,30 @@
                                             </ul>
                                         </li>
                                     </ul>
+                                @else
+                                    @if(App\Models\User::checkPermission($desc->add_by_user) != 'Owner' && Auth::user()->type == 'Admin')
+                                        <ul class="block-options">
+                                            <li class="dropdown">
+                                                <button type="button" data-toggle="dropdown">
+                                                    <i class="fa fa-angle-down"></i>
+                                                </button>
+                                                <ul class="dropdown-menu dropdown-menu-right font-s13">
+                                                    <li>
+                                                        <a tabindex="-1" href="javascript:void(0)"
+                                                        onclick="deleteDesc('{{ encrypt($desc->id) }}');">
+                                                            <i class="fa fa-times text-danger push-5-r"></i>
+                                                            ลบ
+                                                        </a>
+                                                        <a tabindex="-1" href="javascript:void(0)"
+                                                        onclick="description('{{ encrypt($desc->id) }}');">
+                                                            <i class="fa fa-edit text-warning push-5-r"></i>
+                                                            แก้ไข
+                                                        </a>
+                                                    </li>
+                                                </ul>
+                                            </li>
+                                        </ul>
+                                    @endif
                                 @endif
                                 <div class="clearfix">
                                     <div class="pull-left push-15-r">

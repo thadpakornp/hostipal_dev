@@ -76,4 +76,9 @@ class User extends Authenticatable
     {
         return $this->hasOne(OfficeModel::class, 'id', 'office_id');
     }
+
+    public static function checkPermission($id)
+    {
+        return User::find($id)->type;
+    }
 }

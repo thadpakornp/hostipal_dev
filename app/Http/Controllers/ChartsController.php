@@ -286,6 +286,34 @@ class ChartsController extends Controller
                     return response()->json(['success' => 'ลบเรียบร้อยแล้ว'], 200);
                 }
             }
+        } else {
+            if(User::checkPermission($desc->add_by_user) != 'Owner' && Auth::user()->type == 'Admin'){
+                if (empty($desc)) {
+                    return response()->json(['error' => 'ไม่พบข้อมูล'], 404);
+                } elseif ($desc->deleted_at != NULL) {
+                    return response()->json(['error' => 'ไม่พร้อมใช้งาน'], 404);
+                } else {
+                    $files = Charts_files::where('charts_desc_id', $desc->id);
+                    if ($files->count() > 0) {
+                        $file = Charts_files::where('charts_desc_id', $desc->id)->update(['deleted_at' => Carbon::now()]);
+                        if ($file) {
+                            $desc->deleted_at = Carbon::now();
+                            if ($desc->save()) {
+                                foreach ($files->get() as $f) {
+                                    File::delete(public_path('assets/img/photos/' . $f->files));
+                                }
+                                return response()->json(['success' => 'ลบเรียบร้อยแล้ว'], 200);
+                            }
+                            return response()->json(['error' => 'ไม่สามารถลบรายละเอียดได้'], 404);
+                        }
+                        return response()->json(['error' => 'ไม่สามารถลบไฟล์ได้'], 404);
+                    }
+                    $desc->deleted_at = Carbon::now();
+                    if ($desc->save()) {
+                        return response()->json(['success' => 'ลบเรียบร้อยแล้ว'], 200);
+                    }
+                }
+            }
         }
         return response()->json(['error' => 'ไม่อนุญาตให้ดำเนินการ'], 404);
     }

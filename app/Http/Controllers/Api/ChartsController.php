@@ -24,7 +24,7 @@ class ChartsController extends Controller
 {
     public function users()
     {
-        $users = Charts::orderBy('status', 'asc')->orderBy('updated_at','desc')->Charts();
+        $users = Charts::orderBy('updated_at','desc')->orderBy('status', 'asc')->Charts();
         return response()->json([
             'code' => '200',
             'data' => ChartResource::collection($users)
@@ -65,14 +65,16 @@ class ChartsController extends Controller
             'g_location_lat' => $request->input('g_location_lat') == 'null' ? null : $request->input('g_location_lat'),
             'g_location_long' => $request->input('g_location_long') == 'null' ? null : $request->input('g_location_long')
         ]);
-
         if ($description) {
             if ($request->hasFile('files')) {
-                foreach ($request->file('files') as $file) {
+                $files = $request->file('files');
+                foreach  ($files as $file) {
                     $imageName = date('Ymd') . Str::random(8) . time() . '.' . $file->getClientOriginalExtension();
                     $file->move(public_path('assets/img/photos'), $imageName);
 
-                    if ($file->getClientOriginalExtension() == 'png' || $file->getClientOriginalExtension() == 'bmp' || $file->getClientOriginalExtension() == 'jpg' || $file->getClientOriginalExtension() == 'jpeg' || $file->getClientOriginalExtension() == 'gif') {
+                    $mimeTypes=['image/jpeg','image/gif','image/png','image/bmp','image/svg+xml'];
+                    $mimeContentType = mime_content_type(public_path('assets/img/photos/'.$imageName));
+                    if(in_array($mimeContentType, $mimeTypes) ){
                         Resize::uploads($imageName);
                     }
 
@@ -111,7 +113,9 @@ class ChartsController extends Controller
                     $imageName = date('Ymd') . Str::random(8) . time() . '.' . $file->getClientOriginalExtension();
                     $file->move(public_path('assets/img/photos'), $imageName);
 
-                    if ($file->getClientOriginalExtension() == 'png' || $file->getClientOriginalExtension() == 'bmp' || $file->getClientOriginalExtension() == 'jpg' || $file->getClientOriginalExtension() == 'jpeg' || $file->getClientOriginalExtension() == 'gif') {
+                    $mimeTypes=['image/jpeg','image/gif','image/png','image/bmp','image/svg+xml'];
+                    $mimeContentType = mime_content_type(public_path('assets/img/photos/'.$imageName));
+                    if(in_array($mimeContentType, $mimeTypes) ){
                         Resize::uploads($imageName);
                     }
 
