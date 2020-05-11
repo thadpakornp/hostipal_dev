@@ -16,26 +16,6 @@ class SearchController extends Controller
         $this->middleware(['user.status'])->except('index');
     }
 
-    public function index(Request $request)
-    {
-        $users = DB::table('charts')
-            ->leftJoin('charts_description', 'charts.id', '=', 'charts_description.charts_id')
-            ->leftJoin('prefix', 'charts.prefix_id', '=', 'prefix.code')
-            ->orWhere('charts.name', 'LIKE', '%' . $request->input('input_search') . '%')
-            ->orWhere('charts.surname', 'LIKE', '%' . $request->input('input_search') . '%')
-            ->orWhere('charts.idcard', 'LIKE', '%' . $request->input('input_search') . '%')
-            ->orWhere('charts.hn', 'LIKE', '%' . $request->input('input_search') . '%')
-            ->orWhere('charts.phone', 'LIKE', '%' . $request->input('input_search') . '%')
-            ->orWhere('charts_description.description', 'LIKE', '%' . $request->input('input_search') . '%')
-            ->whereNull('charts.deleted_at')
-            ->whereNull('charts_description.deleted_at')
-            ->orderBy('charts.name', 'ASC')
-            ->distinct()
-            ->paginate(6, ['charts.idcard AS idcard']);
-
-        return view('chart_search', compact('users'));
-    }
-
     public function searched(Request $request)
     {
         $users = User::where('id', '<>', Auth::user()->id)->whereNull('deleted_at');

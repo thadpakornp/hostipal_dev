@@ -19,7 +19,6 @@ Route::get('/', function () {
 Auth::routes();
 Route::group(['prefix' => 'backend', 'as' => 'backend.', 'middleware' => ['auth', 'activity.log']], function () {
     Route::get('/', ['as' => 'index', 'uses' => 'MainController@index']);
-    Route::post('/search', ['as' => 'search', 'uses' => 'SearchController@index']);
 
     //Profile
     Route::group(['prefix' => 'users', 'as' => 'users.'], function () {

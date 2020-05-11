@@ -14,7 +14,7 @@ class FormatThai
         $strHour = date("H", strtotime($strDate));
         $strMinute = date("i", strtotime($strDate));
         $strSeconds = date("s", strtotime($strDate));
-        $strMonthCut = Array("", "มกราคม", "กุมภาพันธ์", "มีนาคม", "เมยายน", "พฤศภาคม", "มิถุนายน", "กรกฎาคม", "สิงหาคม", "กันยายน", "ตุลาคม", "พฤษจิกายน", "ธันวาคม");
+        $strMonthCut = Array("", "มกราคม", "กุมภาพันธ์", "มีนาคม", "เมษายน", "พฤษภาคม", "มิถุนายน", "กรกฎาคม", "สิงหาคม", "กันยายน", "ตุลาคม", "พฤศจิกายน", "ธันวาคม");
         $strMonthThai = $strMonthCut[$strMonth];
         return "$strDay $strMonthThai $strYear เวลา $strHour:$strMinute น.";
     }
@@ -24,7 +24,7 @@ class FormatThai
         $strYear = date("Y", strtotime($strDate)) + 543;
         $strMonth = date("n", strtotime($strDate));
         $strDay = date("j", strtotime($strDate));
-        $strMonthCut = Array("", "มกราคม", "กุมภาพันธ์", "มีนาคม", "เมยายน", "พฤศภาคม", "มิถุนายน", "กรกฎาคม", "สิงหาคม", "กันยายน", "ตุลาคม", "พฤษจิกายน", "ธันวาคม");
+        $strMonthCut = Array("", "มกราคม", "กุมภาพันธ์", "มีนาคม", "เมษายน", "พฤษภาคม", "มิถุนายน", "กรกฎาคม", "สิงหาคม", "กันยายน", "ตุลาคม", "พฤศจิกายน", "ธันวาคม");
         $strMonthThai = $strMonthCut[$strMonth];
         return "$strDay $strMonthThai $strYear";
     }

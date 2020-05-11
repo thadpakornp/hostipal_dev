@@ -187,12 +187,12 @@
                     </button>
                 </li>
                 <li class="js-header-search header-search remove-margin">
-                    <form class="form-horizontal" action="{{ route('backend.search') }}" method="post">
+                    <form class="form-horizontal" action="{{ route('backend.charts.search') }}" method="post">
                         @csrf
                         <div
                             class="form-material form-material-primary input-group remove-margin-t remove-margin-b">
-                            <input class="form-control" type="text" id="base-material-text" name="input_search"
-                                   placeholder="Search..">
+                            <input class="form-control" type="text" id="base-material-text" name="search"
+                                   placeholder="Search.." @if(isset($requests)) value="{{ $requests['search'] }}" @endif>
                             <span class="input-group-addon"><i class="si si-magnifier"></i></span>
                         </div>
                     </form>
