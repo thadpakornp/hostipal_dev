@@ -22,17 +22,19 @@ class ChartsController extends Controller
 {
     public function index(Request $request)
     {
-        $files = Charts_files::where('add_by_user', Auth::user()->id)->whereNull('charts_desc_id')->whereNull('deleted_at')->get();
-        if (!empty($files)) {
-            foreach ($files as $file) {
-                $charts_file = Charts_files::find($file->id);
-                $charts_file->deleted_at = Carbon::now();
-                $charts_file->save();
-                File::delete(public_path('assets/img/photos/' . $file->files));
-                File::delete(public_path('assets/img/temnails/' . $file->files));
+        if($request->session()->has('upload_id')){
+            $files = Charts_files::where('add_by_user', Auth::user()->id)->whereNull('charts_desc_id')->whereNull('deleted_at')->whereIn('id',$request->session()->get('upload_id'))->get();
+            if (!empty($files)) {
+                foreach ($files as $file) {
+                    $charts_file = Charts_files::find($file->id);
+                    $charts_file->deleted_at = Carbon::now();
+                    $charts_file->save();
+                    File::delete(public_path('assets/img/photos/' . $file->files));
+                    File::delete(public_path('assets/img/temnails/' . $file->files));
+                }
             }
+            $request->session()->forget('upload_id');
         }
-        $request->session()->forget('upload_id');
         return view('chart_form');
     }
 
@@ -172,6 +174,10 @@ class ChartsController extends Controller
                         $notify_app = new Notify();
                         $notify_app->sentNotifyDevice('Activate', 'คุณ' . $request->input('name') . ' ' . $request->input('surname') . ' สร้างประวัติแล้ว', $dt->device_token, $chart->id);
                     }
+                }
+
+                if($request->input('description') == null && $request->session()->has('upload_id') == false){
+                    Charts_description::where('id',$chart_desc->id)->update(['deleted_at' => Carbon::now()]);
                 }
 
                 return redirect()->back()->with(['success' => 'สร้างประวัติแล้วเรียบร้อยแล้ว']);
@@ -528,8 +534,16 @@ class ChartsController extends Controller
     public
     function iCheck(Request $request)
     {
+        $info = '';
+        if($request->input('types') == 'idcard'){
+            $info =  Charts::where('idcard', $request->input('id'))->latest()->first();
+        } else if($request->input('types') == 'hn'){
+            $info =  Charts::where('hn', $request->input('id'))->latest()->first();
+        } else {
+            $info =  Charts::where('phone', $request->input('id'))->latest()->first();
+        }
         return response()->json([
-            'info' => Charts::where('idcard', $request->input('id'))->latest()->first()
+            'info' => $info
         ], 200);
     }
 

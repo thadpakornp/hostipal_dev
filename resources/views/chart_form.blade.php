@@ -31,17 +31,17 @@
                         <div class="col-sm-8">
                             <div class="form-group">
                                 <div class="col-xs-6">
-                                    <label for="mega-icard">หมายเลขบัตรประชาชน</label>
-                                    <input class="form-control input-lg" type="number" id="mega-icard"
+                                    <label for="mega-idcard">หมายเลขบัตรประชาชน</label>
+                                    <input class="form-control input-lg" type="number" id="mega-idcard"
                                            name="id_card" minlength="13" maxlength="13" required
                                            value="{{ old('id_card') }}" autocomplete="off" autofocus
-                                           onkeyup="iCheck(this.value);">
+                                           onkeyup="iCheck('idcard',this.value);">
 
                                 </div>
                                 <div class="col-xs-6">
                                     <label for="mega-hn">เลขประจำตัวผู้ป่วย (HN)</label>
                                     <input type="text" name="hn" class="form-control input-lg"
-                                           value="{{ old('hn') }}" id="mega-hn" autocomplete="off">
+                                           value="{{ old('hn') }}" id="mega-hn" autocomplete="off" onkeyup="iCheck('hn',this.value);">
                                 </div>
                             </div>
                         </div>
@@ -50,7 +50,7 @@
                                 <div class="col-xs-12">
                                     <label for="mega-phone">เบอร์โทรติดต่อ</label>
                                     <input class="form-control input-lg" type="number" id="mega-phone"
-                                           name="phone" maxlength="10" value="{{ old('phone') }}" autocomplete="off">
+                                           name="phone" maxlength="10" value="{{ old('phone') }}" autocomplete="off" onkeyup="iCheck('phone',this.value);">
                                 </div>
                             </div>
                         </div>
@@ -174,6 +174,9 @@
                             <button class="btn btn-lg btn-success pull-right" type="submit" id="3"><i
                                     class="fa fa-save push-5-r"></i> บันทึก
                             </button>
+                            <a class="btn btn-lg btn-danger pull-right" href="{{ route('backend.charts.index') }}"><i
+                                    class="fa fa-refresh push-5-r"></i> ล้างค่า
+                            </a>
                         </div>
                     </div>
                 </form>
@@ -295,38 +298,107 @@
             $('#modal-upload').modal('show');
         }
 
-        function iCheck(id) {
-            if (id.length == 13) {
-                $.ajax({
-                    url: "{{ route('backend.charts.i.check') }}",
-                    type: "POST",
-                    data: {"_token": "{{ csrf_token() }}", id: id},
-                    success: function (res) {
-                        if (res.info != null) {
-                            $('#mega-prefix').val(res.info.prefix_id);
-                            $('#mega-prefix').trigger('change');
-                            $('#mega-hn').val(res.info.hn);
-                            $('#mega-phone').val(res.info.phone);
-                            $('#mega-name').val(res.info.name);
-                            $('#mega-surname').val(res.info.surname);
-                            $('#mega-address').val(res.info.address);
-                            $('#old_id').val(res.info.id);
-                            if (res.info.hbd != null) {
-                                var hdb = res.info.hbd.split('-');
-                                $('#mega-hbd').datepicker("setDate", new Date(hdb[0], hdb[1], hdb[2]));
-                            }
-                            if (res.info.sex != null) {
-                                var $radios = $('input:radio[name=sex]');
-                                if ($radios.is(':checked') === false) {
-                                    $radios.filter('[value=' + res.info.sex + ']').prop('checked', true);
+        function iCheck(types, id) {
+            if(types == 'idcard'){
+                if (id.length > 12) {
+                    console.log(id);
+                    $.ajax({
+                        url: "{{ route('backend.charts.i.check') }}",
+                        type: "POST",
+                        data: {"_token": "{{ csrf_token() }}", id: id, types: types},
+                        success: function (res) {
+                            if (res.info != null) {
+                                $('#mega-prefix').val(res.info.prefix_id);
+                                $('#mega-prefix').trigger('change');
+                                $('#mega-hn').val(res.info.hn);
+                                $('#mega-phone').val(res.info.phone);
+                                $('#mega-name').val(res.info.name);
+                                $('#mega-surname').val(res.info.surname);
+                                $('#mega-address').val(res.info.address);
+                                $('#old_id').val(res.info.id);
+                                if (res.info.hbd != null) {
+                                    var hdb = res.info.hbd.split('-');
+                                    $('#mega-hbd').datepicker("setDate", new Date(hdb[0], hdb[1], hdb[2]));
+                                }
+                                if (res.info.sex != null) {
+                                    var $radios = $('input:radio[name=sex]');
+                                    if ($radios.is(':checked') === false) {
+                                        $radios.filter('[value=' + res.info.sex + ']').prop('checked', true);
+                                    }
                                 }
                             }
+                        },
+                        error: function (e) {
+                            console.log(e);
                         }
-                    },
-                    error: function (e) {
-                        console.log(e);
-                    }
-                });
+                    });
+                }
+            } else if(types == 'hn'){
+                if(id.length > 5){
+                    $.ajax({
+                        url: "{{ route('backend.charts.i.check') }}",
+                        type: "POST",
+                        data: {"_token": "{{ csrf_token() }}", id: id, types: types},
+                        success: function (res) {
+                            if (res.info != null) {
+                                $('#mega-prefix').val(res.info.prefix_id);
+                                $('#mega-prefix').trigger('change');
+                                $('#mega-idcard').val(res.info.idcard);
+                                $('#mega-phone').val(res.info.phone);
+                                $('#mega-name').val(res.info.name);
+                                $('#mega-surname').val(res.info.surname);
+                                $('#mega-address').val(res.info.address);
+                                $('#old_id').val(res.info.id);
+                                if (res.info.hbd != null) {
+                                    var hdb = res.info.hbd.split('-');
+                                    $('#mega-hbd').datepicker("setDate", new Date(hdb[0], hdb[1], hdb[2]));
+                                }
+                                if (res.info.sex != null) {
+                                    var $radios = $('input:radio[name=sex]');
+                                    if ($radios.is(':checked') === false) {
+                                        $radios.filter('[value=' + res.info.sex + ']').prop('checked', true);
+                                    }
+                                }
+                            }
+                        },
+                        error: function (e) {
+                            console.log(e);
+                        }
+                    });
+                }
+            } else {
+                if(id.length > 9){
+                    $.ajax({
+                        url: "{{ route('backend.charts.i.check') }}",
+                        type: "POST",
+                        data: {"_token": "{{ csrf_token() }}", id: id, types: types},
+                        success: function (res) {
+                            if (res.info != null) {
+                                $('#mega-prefix').val(res.info.prefix_id);
+                                $('#mega-prefix').trigger('change');
+                                $('#mega-hn').val(res.info.hn);
+                                $('#mega-idcard').val(res.info.idcard);
+                                $('#mega-name').val(res.info.name);
+                                $('#mega-surname').val(res.info.surname);
+                                $('#mega-address').val(res.info.address);
+                                $('#old_id').val(res.info.id);
+                                if (res.info.hbd != null) {
+                                    var hdb = res.info.hbd.split('-');
+                                    $('#mega-hbd').datepicker("setDate", new Date(hdb[0], hdb[1], hdb[2]));
+                                }
+                                if (res.info.sex != null) {
+                                    var $radios = $('input:radio[name=sex]');
+                                    if ($radios.is(':checked') === false) {
+                                        $radios.filter('[value=' + res.info.sex + ']').prop('checked', true);
+                                    }
+                                }
+                            }
+                        },
+                        error: function (e) {
+                            console.log(e);
+                        }
+                    });
+                }
             }
         }
     </script>
