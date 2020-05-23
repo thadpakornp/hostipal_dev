@@ -62,8 +62,10 @@ class ChartsController extends Controller
     {
         File::delete(public_path('assets/img/photos/' . $request->input('filename')));
         File::delete(public_path('assets/img/temnails/' . $request->input('filename')));
-        Charts_files::where('files', $request->input('filename'))->update(['deleted_at' => Carbon::now()]);
-        return response()->json(['success' => 'success'], 200);
+        $file = Charts_files::where('files', $request->input('filename'))->first();
+        $file->deleted_at = Carbon::now();
+        $file->save();
+        return response()->json(['id' => $file->id], 200);
     }
 
     public function edit($id)
@@ -450,7 +452,8 @@ class ChartsController extends Controller
                 'type_files' => $request->file('file')->getClientOriginalExtension()
             ]);
             $request->session()->push('upload_id', $id->id);
-            return response()->json(['id' => $request->session()->get('upload_id')], 200);
+            $html = '<li id="'.$id->id.'"> '.$imageName.'</li> ';
+            return response()->json(['html' => $html], 200);
         }
     }
 

@@ -140,6 +140,15 @@
                         </div>
                     </div>
 
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <div class="col-xs-12" id="files_upload_from_computer">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                     <div class="block block-opt-refresh" id="block" style="display: none;">
                         <div class="row">
                             <div class="col-sm-12">
@@ -241,7 +250,8 @@
                         url: "{{ route('backend.charts.destroy.file') }}",
                         data: {"_token": "{{ csrf_token() }}", filename: name},
                         success: function (data) {
-                            //console.log("File has been successfully removed!!");
+                            //console.log(data);
+                            $('#'+data.id).remove();
                         },
                         error: function (e) {
                             console.log(e);
@@ -252,7 +262,8 @@
                         fileRef.parentNode.removeChild(file.previewElement) : void 0;
                 },
                 success: function (file, response) {
-                    //console.log(response.id);
+                    //console.log(response.html);
+                    $('#files_upload_from_computer').append(response.html);
                 },
                 error: function (file, response) {
                     Swal.fire({
