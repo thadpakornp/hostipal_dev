@@ -9,6 +9,7 @@ use App\Http\Resources\Chart as ChartResource;
 use App\Http\Resources\Charts_info;
 use App\Http\Resources\ChartsDate;
 use App\Http\Resources\ChartsDescriptionResource;
+use App\Http\Resources\ChatsResource;
 use App\Http\Resources\ChartsFilesResource;
 use App\Models\Charts;
 use App\Models\Charts_description;
@@ -22,12 +23,27 @@ use File;
 
 class ChartsController extends Controller
 {
-    public function users()
+    public function users($status)
     {
-        $users = Charts::orderBy('updated_at','desc')->orderBy('status', 'asc')->Charts();
+        if(empty($status)){
+            $status = 'all';
+        }
+        if($status == 'all'){
+            $users = Charts::orderBy('updated_at','desc')->orderBy('status', 'asc')->Charts();
+        } else {
+            $users = Charts::where('status','Activate')->orderBy('updated_at','desc')->orderBy('status', 'asc')->Charts();
+        }
         return response()->json([
             'code' => '200',
             'data' => ChartResource::collection($users)
+        ]);
+    }
+
+    public function chats(Request $request)
+    {
+        return response()->json([
+            'code' => '200',
+            'data' => ChatsResource::collection(Charts_description::orderBy('created_at', 'desc')->get()),
         ]);
     }
 

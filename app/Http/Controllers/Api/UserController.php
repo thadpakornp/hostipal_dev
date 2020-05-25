@@ -30,6 +30,20 @@ class UserController extends Controller
         ]);
     }
 
+    public function getID(Request $request){
+        $user = $request->user()->id;
+        if($user){
+            return response()->json([
+                'code' => '200',
+                'data' => $user
+            ]);
+        }
+        return response()->json([
+            'code' => '101',
+            'data' => 'ล้มเหลว'
+        ]);
+    }
+
     public function getProfile(Request $request)
     {
         if (Auth::guard('api')->user()->type == 'User') {

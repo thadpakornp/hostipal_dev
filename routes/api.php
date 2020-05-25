@@ -24,10 +24,11 @@ Route::group(['prefix' => 'v1', 'as' => 'v1.'], function () {
             Route::get('/get', ['as' => 'get', 'uses' => 'Api\UserController@getUser']);
             Route::post('/updated', ['as' => 'updated', 'uses' => 'Api\UserController@updated']);
             Route::post('token', ['as' => 'token', 'uses' => 'Api\UserController@token']);
+            Route::post('/id',['as' => 'id', 'uses' => 'Api\UserController@getID']);
         });
 
         Route::group(['prefix' => 'charts', 'as' => 'charts.'], function () {
-            Route::get('/index', ['as' => 'index', 'uses' => 'Api\ChartsController@users']);
+            Route::get('/index/{status}', ['as' => 'index', 'uses' => 'Api\ChartsController@users']);
             Route::post('/uploaded', ['as' => 'uploaded', 'uses' => 'Api\ChartsController@uploaded']);
             Route::post('/stored', ['as' => 'stored', 'uses' => 'Api\ChartsController@stored']);
             Route::post('/descriptions', ['as' => 'descriptions', 'uses' => 'Api\ChartsController@descriptions']);
@@ -36,6 +37,7 @@ Route::group(['prefix' => 'v1', 'as' => 'v1.'], function () {
             Route::post('/files', ['as' => 'files', 'uses' => 'Api\ChartsController@files']);
             Route::get('/stw', ['as' => 'stw', 'uses' => 'Api\ChartsController@sentNotifyWeb']);
             Route::post('/stwsb', ['as' => 'stwsb', 'uses' => 'Api\ChartsController@sentNotifyWebAndMobile']);
+            Route::get('/chats', ['as' => 'chats', 'uses' => 'Api\ChartsController@chats']);
         });
 
         Route::group(['prefix' => 'manage', 'as' => 'manage.'], function () {
