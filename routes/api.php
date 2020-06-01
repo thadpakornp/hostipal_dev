@@ -35,7 +35,7 @@ Route::group(['prefix' => 'v1', 'as' => 'v1.'], function () {
             Route::post('/descriptions/success', ['as' => 'descriptions.success', 'uses' => 'Api\ChartsController@success']);
             Route::post('/descriptions/deleted', ['as' => 'descriptions.deleted', 'uses' => 'Api\ChartsController@deleted']);
             Route::post('/files', ['as' => 'files', 'uses' => 'Api\ChartsController@files']);
-            Route::get('/stw', ['as' => 'stw', 'uses' => 'Api\ChartsController@sentNotifyWeb']);
+            Route::post('/stw', ['as' => 'stw', 'uses' => 'Api\ChartsController@sentNotifyWeb']);
             Route::post('/stwsb', ['as' => 'stwsb', 'uses' => 'Api\ChartsController@sentNotifyWebAndMobile']);
             Route::get('/chats', ['as' => 'chats', 'uses' => 'Api\ChartsController@chats']);
         });

@@ -9,17 +9,40 @@
         "prod": "npm run production",
         "production": "cross-env NODE_ENV=production node_modules/webpack/bin/webpack.js --no-progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js"
     },
+    "config": {
+        "webpack": "node_modules/laravel-mix/setup/webpack.config.js"
+    },
     "devDependencies": {
         "axios": "^0.19",
+        "babel-core": "^7.0.0-bridge.0",
+        "babel-loader": "^7.1.5",
+        "babel-preset-env": "^1.7.0",
+        "bootstrap-sass": "^3.4.1",
         "cross-env": "^5.1",
+        "css-loader": "^3.5.3",
+        "jquery": "^3.1.1",
         "laravel-mix": "^5.0.1",
         "lodash": "^4.17.13",
+        "mini-css-extract-plugin": "^0.9.0",
+        "node-sass": "^4.14.1",
         "resolve-url-loader": "^2.3.1",
         "sass": "^1.15.2",
-        "sass-loader": "^8.0.0",
-        "vue-template-compiler": "^2.6.11"
+        "sass-loader": "^8.0.2",
+        "style-loader": "^1.2.1",
+        "vue": "^2.1.10",
+        "vue-template-compiler": "^2.6.11",
+        "webpack": "^4.43.0"
     },
     "dependencies": {
-        "node-gcm": "^1.0.2"
+        "@babel/core": "^7.10.1",
+        "@babel/preset-env": "^7.10.1",
+        "laravel-echo": "^1.8.0",
+        "node-gcm": "^1.0.2",
+        "pusher-js": "^6.0.3",
+        "quickblox": "^2.12.7",
+        "socket.io": "^2.3.0",
+        "vue-loader": "^15.9.2",
+        "vue-socket.io": "^3.0.9",
+        "ws": "^7.3.0"
     }
 }

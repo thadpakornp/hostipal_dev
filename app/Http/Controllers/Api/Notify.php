@@ -11,9 +11,9 @@ use FCM;
 
 class Notify extends Controller
 {
-    public function sentNotifyWeb($id, $title, $content, $action = null)
+    public function sentNotifyWeb($id, $title, $content, $action = null, $onchat = true)
     {
-        event(new SendNotifyToWeb($id, $title, $content, $action));
+        event(new SendNotifyToWeb($id, $title, $content, $action, $onchat));
     }
 
     public function sentNotifyDevice($title, $body, $device_token, $my_data = null)

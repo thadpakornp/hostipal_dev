@@ -161,7 +161,8 @@
                                             <th width="45%">รายละเอียด</th>
                                             <th width="10%" class="text-center">อยู่ที่</th>
                                             <th width="20%" class="text-center">ผู้บันทึก</th>
-                                            <th width="20%" class="text-center">วันที่และเวลา</th>
+                                            <th width="13%" class="text-center">วันที่และเวลา</th>
+                                            <th width="7%" class="text-center">ลบ</th>
                                             </thead>
                                             <tbody>
                                             </tbody>
@@ -275,6 +276,46 @@
                     this.removeFile(file)
                 }
             };
+        
+        function confirmDelete(id){
+            Swal.fire({
+                title: 'ยืนยันการลบ?',
+                text: "หากลบแล้ว ไม่สามารถกู้คืนได้ ยืนยัน?",
+                type: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'ลบ',
+                cancelButtonText: 'ยกเลิก'
+            }).then((result) => {
+                if (result.value) {
+                    $.ajax({
+                        type: 'POST',
+                        url: '{{ route('backend.charts.chats.destroy') }}',
+                        data: {"_token": "{{ csrf_token() }}", id: id},
+                        success: function (res) {
+                            Swal.fire({
+                                type: 'success',
+                                title: 'สำเร็จ',
+                                text: 'ลบเรียบร้อยแล้ว',
+                                confirmButtonText: 'ตกลง',
+                            }).then(function () {
+                                $('#'+res.id).remove();
+                            });
+                        },
+                        error: function (e) {
+                            console.log(e)
+                            Swal.fire({
+                                type: 'error',
+                                title: 'เกิดข้อผิดพลาด',
+                                text: 'ไม่สามารถลบได้',
+                                confirmButtonText: 'ตกลง',
+                            });
+                        }
+                    });
+                }
+            })
+        }
 
         function LoadingDataFromApp() {
             $("table tbody>tr").remove();

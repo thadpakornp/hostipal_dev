@@ -20,6 +20,10 @@ Auth::routes();
 Route::group(['prefix' => 'backend', 'as' => 'backend.', 'middleware' => ['auth', 'activity.log']], function () {
     Route::get('/', ['as' => 'index', 'uses' => 'MainController@index']);
 
+    Route::group(['prefix' => 'chat', 'as' => 'chat.'], function () {
+        Route::post('/', ['as' => 'index', 'uses' => 'ChatsController@index']);
+    });
+
     //Profile
     Route::group(['prefix' => 'users', 'as' => 'users.'], function () {
         Route::get('/', ['as' => 'index', 'uses' => 'ProfileController@index']);
@@ -50,6 +54,7 @@ Route::group(['prefix' => 'backend', 'as' => 'backend.', 'middleware' => ['auth'
         Route::post('/description/stored', ['as' => 'description.stored', 'uses' => 'ChartsController@descrtipionStored']);
         Route::get('/{id}/files/download', ['as' => 'description.file.download', 'uses' => 'ChartsController@download']);
         Route::post('/description/destroy', ['as' => 'description.destroy', 'uses' => 'ChartsController@destroy']);
+        Route::post('/chats/destroy', ['as' => 'chats.destroy', 'uses' => 'ChartsController@destroyChats']);
         Route::post('/files/destroy', ['as' => 'files.destroy', 'uses' => 'ChartsController@filesDestroy']);
         Route::post('/files/deleted', ['as' => 'files.deleted', 'uses' => 'ChartsController@filesDeleted']);
         Route::post('/description/edit', ['as' => 'description.edit', 'uses' => 'ChartsController@descrtipionEdit']);

@@ -43,7 +43,7 @@ class ChartsController extends Controller
     {
         return response()->json([
             'code' => '200',
-            'data' => ChatsResource::collection(Charts_description::orderBy('created_at', 'desc')->get()),
+            'data' => ChatsResource::collection(Charts_description::Getchats()->where('type_charts',1)->orderBy('created_at', 'asc')->get()),
         ]);
     }
 
@@ -79,7 +79,8 @@ class ChartsController extends Controller
             'description' => $request->input('description'),
             'add_by_user' => Auth::guard('api')->user()->id,
             'g_location_lat' => $request->input('g_location_lat') == 'null' ? null : $request->input('g_location_lat'),
-            'g_location_long' => $request->input('g_location_long') == 'null' ? null : $request->input('g_location_long')
+            'g_location_long' => $request->input('g_location_long') == 'null' ? null : $request->input('g_location_long'),
+            'type_charts' => $request->input('type_charts') ? $request->input('type_charts') : 0
         ]);
         if ($description) {
             if ($request->hasFile('files')) {
@@ -223,9 +224,28 @@ class ChartsController extends Controller
         ]);
     }
 
-    public function sentNotifyWeb(){
+    public function sentNotifyWeb(Request $request){
        $notify_web = new Notify();
-       $notify_web->sentNotifyWeb(Auth::guard('api')->user()->id, 'New content', 'ระบบได้รับการบันทึกข้อมูลใหม่จากโมบาย', route('backend.charts.index'));
+       $user = User::find(Auth::guard('api')->user()->id);
+       if(empty($user)){
+            $sent_by = 'Not found User';
+       } else {
+            $sent_by = $user->prefix->name.$user->name.' '.$user->surname;
+       }
+       $message = $request->input('description');
+       if($message == '' || $message == null){
+           $msg = 'มีการเพิ่มไฟล์ใหม่';
+       } else {
+           $msg = $message;
+       }
+       $notify_web->sentNotifyWeb(Auth::guard('api')->user()->id, $sent_by, $msg, route('backend.charts.index'));
+       $device_token = User::where('id', '<>', Auth::guard('api')->user()->id)->whereNotNull('device_token')->get();
+       if(!empty($device_token)){
+           foreach($device_token as $dt){
+                $notify_app = new Notify();
+                $notify_app->sentNotifyDevice($sent_by, $msg, $dt->device_token, 0);
+           }
+       }
     }
 
     public function sentNotifyWebAndMobile(Request $request){

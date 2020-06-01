@@ -18,13 +18,15 @@ class SendNotifyToWeb implements ShouldBroadcast
     public $title;
     public $content;
     public $action;
+    public $onchat;
 
-    public function __construct($id, $title, $content, $action)
+    public function __construct($id, $title, $content, $action, $onchat)
     {
         $this->id = $id;
         $this->title = $title;
         $this->content = $content;
         $this->action = $action;
+        $this->onchat = $onchat;
     }
 
     public function broadcastOn()
