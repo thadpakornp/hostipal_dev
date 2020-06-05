@@ -57,7 +57,8 @@
 
 <!-- Login Footer -->
 <div class="push-10-t text-center animated fadeInUp">
-    <small class="text-muted font-w600"><span class="js-year-copy"></span> &copy; IMATTHIO Company Limited. All Rights Reserved.</small>
+    <small class="text-muted font-w600"><span class="js-year-copy"></span> &copy; IMATTHIO Company Limited. All Rights Reserved.</small><br/>
+    <small class="text-muted font-w600"><a href="{{ url('policy') }}">Privacy Policy</a> || <a href="{{ url('terms') }}">Terms &amp; Conditions</a></small>
 </div>
 <!-- END Login Footer -->
 <!-- OneUI Core JS: jQuery, Bootstrap, slimScroll, scrollLock, Appear, CountTo, Placeholder, Cookie and App.js -->

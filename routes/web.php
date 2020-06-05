@@ -12,8 +12,14 @@
 Route::get('policy', function() {
     return view('policy');
 });
+Route::get('terms', function() {
+    return view('terms');
+});
 Route::get('/', function () {
     return redirect()->route('backend.index');
+});
+Route::get('/register2', function () {
+    return view('auth.register2');
 });
 
 Auth::routes();

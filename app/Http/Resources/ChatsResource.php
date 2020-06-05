@@ -11,6 +11,7 @@ use App\Helpers\FormatThai;
 
 /**
  * @property mixed description
+ * @property mixed type_desc
  * @property mixed add_by_user
  * @property mixed id
  * @property mixed created_at
@@ -31,11 +32,12 @@ class ChatsResource extends JsonResource
         return [
             'id' => $this->id,
             'description' => $this->description == null ? '' : $this->description,
+            'type_desc' => $this->type_desc,
             'add_by_user' => UserResource::make(User::find($this->add_by_user)),
             'files' => Charts_files::where('charts_desc_id',$this->id)->count() == 0 ? null : Charts_files::where('charts_desc_id',$this->id)->first(['files','type_files']),
             'g_location_lat' => $this->g_location_lat,
             'g_location_long' => $this->g_location_long,
-            'created_at' => FormatThai::DateThaiToChat($this->created_at),
+            'created_at' =>   FormatThai::DateThaiNoTime($this->created_at),
             'timed_at' => FormatThai::TimeThaiToChat($this->created_at),
         ];
     }

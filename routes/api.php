@@ -10,6 +10,12 @@
 |
 */
 Route::group(['prefix' => 'v1', 'as' => 'v1.'], function () {
+    Route::get('checkVersion', function() {
+        return response()->json([
+            'code' => '200',
+            'data' => '3.0.0'
+        ]); 
+    });
     Route::get('prefix', ['as' => 'prefix', 'uses' => 'Api\RegisterController@prefix']);
     Route::post('register', ['as' => 'register', 'uses' => 'Api\RegisterController@stored']);
     Route::post('forget', ['as' => 'forget', 'uses' => 'Api\ForgotController']);
@@ -38,6 +44,9 @@ Route::group(['prefix' => 'v1', 'as' => 'v1.'], function () {
             Route::post('/stw', ['as' => 'stw', 'uses' => 'Api\ChartsController@sentNotifyWeb']);
             Route::post('/stwsb', ['as' => 'stwsb', 'uses' => 'Api\ChartsController@sentNotifyWebAndMobile']);
             Route::get('/chats', ['as' => 'chats', 'uses' => 'Api\ChartsController@chats']);
+            Route::post('/chat/uploaded', ['as' => 'chatUpload', 'uses' => 'Api\ChartsController@chatUpload']);
+            Route::post('/chat/lastProcess', ['as' => 'lastProcess', 'uses' => 'Api\ChartsController@lastProcessChat']);
+            Route::post('/chat/images', ['as' => 'chatimages', 'uses' => 'Api\ChartsController@chatimages']);
         });
 
         Route::group(['prefix' => 'manage', 'as' => 'manage.'], function () {

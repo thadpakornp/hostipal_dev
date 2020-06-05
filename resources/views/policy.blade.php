@@ -8,9 +8,9 @@
     </head>
     <body>
     <strong>Privacy Policy</strong> <p>
-                  IMATTHIO Company Limited built the Surat Stroke Fast Track app as
+                   IMATTHIO Company Limited, Thailand built the Surat Stroke Fast Track app as
                   a Free app. This SERVICE is provided by
-                  IMATTHIO Company Limited at no cost and is intended for use as
+                   IMATTHIO Company Limited, Thailand at no cost and is intended for use as
                   is.
                 </p> <p>
                   This page is used to inform visitors regarding our
@@ -29,7 +29,7 @@
                 </p> <p><strong>Information Collection and Use</strong></p> <p>
                   For a better experience, while using our Service, we
                   may require you to provide us with certain personally
-                  identifiable information, including but not limited to RECORD_AUDIO,WRITE_EXTERNAL_STORAGE,ACCESS_FINE_LOCATION,ACCESS_COARSE_LOCATION,RECEIVE_BOOT_COMPLETED,VIBRATE. The information that
+                  identifiable information, including but not limited to RECORD_AUDIO,WRITE_EXTERNAL_STORAGE,ACCESS_FINE_LOCATION,ACCESS_COARSE_LOCATION,RECEIVE_BOOT_COMPLETED,VIBRATE,READ_EXTERNAL_STORAGE,CAMERA. The information that
                   we request will be retained by us and used as described in this privacy policy.
                 </p> <div><p>
                     The app does use third party services that may collect
@@ -101,9 +101,9 @@
                   periodically for any changes. we will
                   notify you of any changes by posting the new Privacy Policy on
                   this page.
-                </p> <p>This policy is effective as of 2020-02-01</p> <p><strong>Contact Us</strong></p> <p>
+                </p> <p>This policy is effective as of 2020-06-03</p> <p><strong>Contact Us</strong></p> <p>
                   If you have any questions or suggestions about our
-                  Privacy Policy, do not hesitate to contact us at IMATTHIO Company Limited.
+                  Privacy Policy, do not hesitate to contact us at IMATTHIO Company Limited, Thailand.
                 </p> <p>
                   This privacy policy page was created at
                   <a href="https://privacypolicytemplate.net" target="_blank">privacypolicytemplate.net</a>
@@ -111,3 +111,4 @@
                   <a href="https://app-privacy-policy-generator.firebaseapp.com/" target="_blank">App Privacy Policy Generator</a></p>
     </body>
     </html>
+      

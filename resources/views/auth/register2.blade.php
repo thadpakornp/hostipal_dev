@@ -3,11 +3,6 @@
 @section('content')
     <div class="block block-themed animated fadeIn">
         <div class="block-header bg-success">
-            <ul class="block-options">
-                <li>
-                    <a href="{{ route('login') }}" data-toggle="tooltip" data-placement="left" title="เข้าใช้งานระบบ"><i class="si si-login"></i></a>
-                </li>
-            </ul>
             <h3 class="block-title" style="font-family: 'Sarabun', sans-serif;">ลงทะเบียนใช้งานสำหรับสมาชิกใหม่</h3>
         </div>
         <div class="block-content block-content-full block-content-narrow">

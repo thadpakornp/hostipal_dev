@@ -29,7 +29,7 @@ class Chart extends JsonResource
             'name' => Charts::where('idcard', $this->idcard)->orderBy('id', 'desc')->first()->name ?? '',
             'surname' => Charts::where('idcard', $this->idcard)->orderBy('id', 'desc')->first()->surname ?? '',
             'address' => Charts::where('idcard', $this->idcard)->orderBy('id', 'desc')->first()->address ?? '',
-            'profile' => Charts::where('idcard', $this->idcard)->orderBy('id', 'desc')->first()->profile == null ? asset('assets/img/avatars/avatar1.jpg') : asset('assets/img/profiles/' . Charts::where('idcard', $this->idcard)->orderBy('id', 'desc')->first()->profile ?? '')
+            'profile' => Charts::where('idcard', $this->idcard)->orderBy('id', 'desc')->first()->profile == null ? asset('assets/img/avatars/avatar1.jpg') : asset('assets/img/avatars/' . Charts::where('idcard', $this->idcard)->orderBy('id', 'desc')->first()->profile ?? '')
         ];
     }
 }

@@ -447,7 +447,7 @@
                         <div
                             class="form-material form-material-primary input-group remove-margin-t remove-margin-b">
                             <input class="form-control" type="text" id="base-material-text" name="search"
-                                   placeholder="Search.." @if(isset($requests)) value="{{ $requests['search'] }}" @endif>
+                                   placeholder="Search.." @if(isset($requests['search'])) value="{{ $requests['search'] }}" @endif>
                             <span class="input-group-addon"><i class="si si-magnifier"></i></span>
                         </div>
                     </form>

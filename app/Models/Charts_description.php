@@ -26,6 +26,6 @@ class Charts_description extends Model
 
     public function scopeGetchats($query){
         $dt = Carbon::create(date('Y'), date('m'), date('d'),0);
-        return $query->where('created_at','>',$dt->subDays(21));
+        return $query->where('created_at','>=',$dt->subDays(10));
     }
 }

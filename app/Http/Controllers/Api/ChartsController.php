@@ -20,6 +20,7 @@ use Auth;
 use Carbon\Carbon;
 use Illuminate\Support\Str;
 use File;
+use Illuminate\Support\Facades\DB;
 
 class ChartsController extends Controller
 {
@@ -44,6 +45,56 @@ class ChartsController extends Controller
         return response()->json([
             'code' => '200',
             'data' => ChatsResource::collection(Charts_description::Getchats()->where('type_charts',1)->orderBy('created_at', 'asc')->get()),
+        ]);
+    }
+
+    public function chatimages(Request $request){
+        return response()->json([
+            'code' => '200',
+            'data' => ChartsFilesResource::collection(Charts_files::where('charts_desc_id',$request->input('id'))->get()),
+        ]); 
+    }
+
+    public function chatUpload(Request $request){
+        if ($request->hasFile('files')) {
+            $files = $request->file('files');
+            $imageName = date('Ymd') . Str::random(8) . time() . '.' . $files->getClientOriginalExtension();
+            $files->move(public_path('assets/img/photos'), $imageName);
+
+            $file_id = Charts_files::create([
+                'add_by_user' => Auth::guard('api')->user()->id,
+                'files' => $imageName,
+                'type_files' => $files->getClientOriginalExtension()
+            ])->id;
+
+            $mimeTypes=['image/jpeg','image/gif','image/png','image/bmp','image/svg+xml'];
+            $mimeContentType = mime_content_type(public_path('assets/img/photos/'.$imageName));
+            if(in_array($mimeContentType, $mimeTypes) ){
+                Resize::uploads($imageName);
+            }
+            return response()->json([
+                'code' => '200',
+                'data' => $file_id,
+            ]);
+        }
+        return response()->json([
+            'code' => '200',
+            'data' => 'อัปโหลดล้มเหลว'
+        ]);
+    }
+
+    public function lastProcessChat(Request $request){
+        $descriptionid = Charts_description::create([
+            'description' => $request->input('description'),
+            'type_desc' => 1,
+            'add_by_user' => Auth::guard('api')->user()->id,
+            'type_charts' => 1
+        ])->id;
+        $id_update = json_decode($request->input('id'));
+        Charts_files::whereIn('id',$id_update)->update(['charts_desc_id' => $descriptionid]);
+        return response()->json([
+            'code' => '200',
+            'data' => 'อัปโหลดเรียบร้อยแล้ว'
         ]);
     }
 
