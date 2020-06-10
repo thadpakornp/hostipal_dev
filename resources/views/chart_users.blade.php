@@ -69,10 +69,10 @@
                             </th>
                             <th class="hidden-xs" style="font-family: 'Sarabun', sans-serif;" width="5%">เพศ</th>
                             <th class="hidden-xs" style="font-family: 'Sarabun', sans-serif;" width="30%">ที่อยู่</th>
-                            <th class="text-center" style="font-family: 'Sarabun', sans-serif;" width="15%">
+                            <th class="text-center" style="font-family: 'Sarabun', sans-serif;" width="13%">
                                 เบอร์ติดต่อ
                             </th>
-                            <th width="10%"></th>
+                            <th width="12%"></th>
                         </tr>
                         </thead>
                         <tbody>
@@ -114,10 +114,19 @@
                                         <td>@if($user->sex == 'M') ชาย @else หญฺิง @endif</td>
                                         <td></td>
                                         <td>{{ $user->phone }}</td>
-                                        <td><a class="btn btn-primary"
-                                               href="{{ route('backend.charts.feeds',encrypt($user->idcard)) }}">
-                                                <i class="fa fa-fw fa-address-book"></i> แฟ้มประวัติผู้ป่วย
-                                            </a></td>
+                                        <td>
+                                            <div class="btn-group">
+                                                    <a type="button" class="btn btn-sm btn-warning" data-toggle="tooltip" title="แก้ไขประวัติผู้ป่วย" href="{{ route('backend.charts.edit',encrypt($user->id)) }}">
+                                                        <i class="fa fa-edit"></i>
+                                </a>
+                                                    <a type="button" class="btn btn-sm btn-success" data-toggle="tooltip" title="พิมพ์ประวัติผู้ป่วย">
+                                                        <i class="fa fa-print"></i>
+                                </a>
+                                                    <a type="button" class="btn btn-sm btn-primary" data-toggle="tooltip" title="แฟ้มประวัติผู้ป่วย" href="{{ route('backend.charts.feeds',encrypt($user->idcard)) }}">
+                                                        <i class="fa fa-id-card-o"></i>
+                                </a>
+                                                </div>
+                                        </td>
                                     </tr>
                                 @endif
                             @endforeach
@@ -157,10 +166,10 @@
                         </th>
                         <th class="hidden-xs" style="font-family: 'Sarabun', sans-serif;" width="5%">เพศ</th>
                         <th class="hidden-xs" style="font-family: 'Sarabun', sans-serif;" width="30%">ที่อยู่</th>
-                        <th class="text-center" style="font-family: 'Sarabun', sans-serif;" width="15%">
-                            เบอร์ติดต่อ
-                        </th>
-                        <th width="10%"></th>
+                        <th class="text-center" style="font-family: 'Sarabun', sans-serif;" width="13%">
+                                เบอร์ติดต่อ
+                            </th>
+                            <th width="12%"></th>
                     </tr>
                     </thead>
                     <tbody>
@@ -198,10 +207,19 @@
                                     <td>@if($user->sex == 'M') ชาย @else หญฺิง @endif</td>
                                     <td></td>
                                     <td>{{ $user->phone }}</td>
-                                    <td><a class="btn btn-primary"
-                                           href="{{ route('backend.charts.feeds',encrypt($user->idcard)) }}">
-                                            <i class="fa fa-fw fa-address-book"></i> แฟ้มประวัติผู้ป่วย
-                                        </a></td>
+                                    <td>
+                                    <div class="btn-group">
+                                                    <a type="button" class="btn btn-sm btn-warning" data-toggle="tooltip" title="แก้ไขประวัติผู้ป่วย" href="{{ route('backend.charts.edit',encrypt($user->id)) }}">
+                                                        <i class="fa fa-edit"></i>
+                                </a>
+                                                    <a type="button" class="btn btn-sm btn-success" data-toggle="tooltip" title="พิมพ์ประวัติผู้ป่วย">
+                                                        <i class="fa fa-print"></i>
+                                </a>
+                                                    <a type="button" class="btn btn-sm btn-primary" data-toggle="tooltip" title="แฟ้มประวัติผู้ป่วย" href="{{ route('backend.charts.feeds',encrypt($user->idcard)) }}">
+                                                        <i class="fa fa-id-card-o"></i>
+                                </a>
+                                                </div>
+                                    </td>
                                 </tr>
                             @endif
                         @endforeach

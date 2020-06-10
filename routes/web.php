@@ -18,9 +18,8 @@ Route::get('terms', function() {
 Route::get('/', function () {
     return redirect()->route('backend.index');
 });
-Route::get('/register2', function () {
-    return view('auth.register2');
-});
+Route::get('/register2', 'Auth\RegisterController2@index');
+Route::post('/register2/posted', 'Auth\RegisterController2@posted');
 
 Auth::routes();
 Route::group(['prefix' => 'backend', 'as' => 'backend.', 'middleware' => ['auth', 'activity.log']], function () {

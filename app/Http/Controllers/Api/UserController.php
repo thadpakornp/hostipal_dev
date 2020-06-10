@@ -152,8 +152,10 @@ class UserController extends Controller
 
         if ($request->hasFile('profile')) {
             if ($user->profile != NULL || $user->profile != '') {
-                File::delete(public_path('assets/img/profiles/' . $user->profile));
-                File::delete(public_path('assets/img/avatars/' . $user->profile));
+                if($user->profile != 'avatar1.jpg'){
+                    File::delete(public_path('assets/img/profiles/' . $user->profile));
+                    File::delete(public_path('assets/img/avatars/' . $user->profile));
+                }
             }
 
             $profile = time() . '.' . $request->file('profile')->extension();

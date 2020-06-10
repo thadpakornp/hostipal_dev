@@ -1,5 +1,10 @@
 @extends('layouts.backend')
 
+@section('css')
+    <link rel="stylesheet" href="{{ asset('assets/js/plugins/magnific-popup/magnific-popup.min.css') }}">
+    <link rel="stylesheet" href="https://cdn.plyr.io/3.5.10/plyr.css"/>
+@endsection
+
 @section('content')
     <div class="content content-boxed">
         <div class="block">
@@ -70,20 +75,28 @@
                             (จำนวน {{ count($user->charts_files) }} ไฟล์)
                         </div>
                         <div class="block-content block-content-full">
+                        <div class="row js-gallery">
                             @foreach($user->charts_files as $file)
-                                <ul class="list list-events">
-                                    <li>@if(Auth::user()->type == 'Owner' || $file->add_by_user == Auth::user()->id)
-                                            <a href="javascript:void(0)"><i
-                                                    class="si si-close text-danger"
-                                                    onclick="delete_file('{{ encrypt($file->id) }}')"></i></a>
-                                        @endif
-                                        <a
-                                            href="{{ route('backend.charts.description.file.download',encrypt($file->id)) }}">{{ $file->files }}</a>
-                                        <small
-                                            class="pull-right">อัปโหลดเมื่อ {{ App\Helpers\FormatThai::DateThai($file->created_at) }}</small>
-                                    </li>
-                                </ul>
+                                            
+                                                @if($file->type_files == 'png' || $file->type_files == 'bmp' || $file->type_files == 'jpg' || $file->type_files == 'jpeg' || $file->type_files == 'gif')
+                                                    <div class="col-xs-6">
+                                                        <a class="img-link"
+                                                           href="{{ asset('assets/img/photos/'.$file->files) }}">
+                                                            <img class="img-responsive"
+                                                                 src="{{ asset('assets/img/temnails/'.$file->files) }}"
+                                                                 alt="">
+                                                        </a>
+                                                    </div>
+                                                @endif
+                                          
+                                                @if($file->type_files == 'mp4' || $file->type_files == 'mov' || $file->type_files == 'mpg' || $file->type_files == 'mpeg' || $file->type_files == 'avi')
+                                                <video id="player_video" playsinline controls width="100%">
+                                                    <source src="{{ asset('assets/img/photos/'.$file->files) }}"
+                                                            type="video/{{ $file->type_files }}"/>
+                                                </video><br/>
+                                            @endif
                             @endforeach
+                            </div>
                         </div>
                     </div>
                 @else
@@ -93,13 +106,17 @@
                         </div>
                     </div>
                 @endif
-
-
             </div>
         </div>
     </div>
 @endsection
 @section('script')
+<script src="{{ asset('assets/js/plugins/magnific-popup/magnific-popup.min.js') }}"></script>
+<script src="https://cdn.plyr.io/3.5.10/plyr.js"></script>
+    <script>jQuery(function(){ 
+        App.initHelpers(['magnific-popup']);
+        const player_video = Plyr.setup('#player_video'); 
+        });</script>
     <script type="text/javascript">
         function delete_file(id) {
             Swal.fire({

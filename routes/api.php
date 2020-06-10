@@ -13,7 +13,7 @@ Route::group(['prefix' => 'v1', 'as' => 'v1.'], function () {
     Route::get('checkVersion', function() {
         return response()->json([
             'code' => '200',
-            'data' => '3.0.0'
+            'data' => '3.2.1'
         ]); 
     });
     Route::get('prefix', ['as' => 'prefix', 'uses' => 'Api\RegisterController@prefix']);
@@ -34,7 +34,10 @@ Route::group(['prefix' => 'v1', 'as' => 'v1.'], function () {
         });
 
         Route::group(['prefix' => 'charts', 'as' => 'charts.'], function () {
-            Route::get('/index/{status}', ['as' => 'index', 'uses' => 'Api\ChartsController@users']);
+            Route::get('/images/{id}', ['as' => 'images', 'uses' => 'Api\ChartsController@getImages']);
+            Route::post('/search', ['as' => 'search', 'uses' => 'Api\ChartsController@searching']);
+            Route::get('/mouths', ['as' => 'mouths', 'uses' => 'Api\ChartsController@mouths']);
+            Route::get('/index/{date_value}/{status}', ['as' => 'index', 'uses' => 'Api\ChartsController@users']);
             Route::post('/uploaded', ['as' => 'uploaded', 'uses' => 'Api\ChartsController@uploaded']);
             Route::post('/stored', ['as' => 'stored', 'uses' => 'Api\ChartsController@stored']);
             Route::post('/descriptions', ['as' => 'descriptions', 'uses' => 'Api\ChartsController@descriptions']);

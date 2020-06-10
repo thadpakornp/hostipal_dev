@@ -80,6 +80,22 @@
                     </div>
                 </div>
                 <div class="form-group">
+                    <label class="col-xs-12" for="contact1-subject">สังกัดสถานพยาบาล</label>
+                    <div class="col-xs-12">
+                        <select name="office_id" size="1" class="form-control select2" id="office" required>
+                            <option value="">โปรดระบุสถานพยาบาล</option>
+                                @php
+                                $offices = App\Models\OfficeModel::whereNull('deleted_at')->get();
+                                @endphp
+                                @if(isset($offices))
+                                @foreach($offices as $office)
+                                    <option value="{{ $office->id }}">{{ $office->name }}</option>
+                                @endforeach
+                                @endif
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
                     <label class="col-xs-12" for="example-file-input">รูปโปรไฟล์</label>
                     <div class="col-xs-12">
                         <input type="file" id="example-file-input" name="file-input" required>
@@ -108,6 +124,7 @@
     <script type="text/javascript">
         $(document).ready(function() {
             $('#prefix').select2();
+            $('#office').select2();
         });
         $('.btn-primary').on('click', function () {
             $('#register-terms').prop('checked',true);

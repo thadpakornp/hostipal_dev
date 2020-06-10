@@ -2,53 +2,23 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Helpers\CreateUser;
 use App\Http\Controllers\Controller;
-use App\Providers\RouteServiceProvider;
-use Illuminate\Foundation\Auth\RegistersUsers;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Session;
+use App\Classes\Resize;
+use App\Models\User;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\Hash;
 
-class RegisterController extends Controller
+class RegisterController2 extends Controller
 {
-    /*
-    |--------------------------------------------------------------------------
-    | Register Controller
-    |--------------------------------------------------------------------------
-    |
-    | This controller handles the registration of new users as well as their
-    | validation and creation. By default this controller uses a trait to
-    | provide this functionality without requiring any additional code.
-    |
-    */
-
-    use RegistersUsers;
-
-    /**
-     * Where to redirect users after registration.
-     *
-     * @var string
-     */
-    protected $redirectTo = RouteServiceProvider::HOME;
-
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        $this->middleware('guest');
+    public function index() {
+        return view('auth.register2');
     }
 
-    /**
-     * Get a validator for an incoming registration request.
-     *
-     * @param array $data
-     * @return \Illuminate\Contracts\Validation\Validator
-     */
-    protected function validator(array $data)
-    {
-        return Validator::make($data, [
+    public function posted(Request $request){
+        $validator = Validator::make($request->all(), [
             'prefix_id' => ['required'],
             'name' => ['required', 'string', 'max:255'],
             'surname' => ['required','string','max:255'],
@@ -58,7 +28,6 @@ class RegisterController extends Controller
             'phone' => ['required','string','max:10'],
             'office_id' => ['required'],
             'agree-terms' => ['required'],
-            'file-input' => ['required','mimes:jpeg,bmp,png','max:10240']
         ],[
             'prefix_id.required' => 'โปรดเลือกคำนำหน้า',
             'name.required' => 'กรุณาระบุชื่อ',
@@ -81,20 +50,37 @@ class RegisterController extends Controller
             'phone.max' => 'เบอร์โทรติดต่อยาวเกินไป',
             'office_id.required' => 'กรุณาระบุสถานพยาบาล',
             'agree-terms.required' => 'กรุณายอมรับเงื่อนไขการใช้บริการ',
-            'file-input.required' => 'กรุณาระบุรูปภาพ',
-            'file-input.mimes' => 'ประเภทรูปภาพไม่ถูกต้อง',
-            'file-input.max' => 'รูปภาพใหญ่เกินไป ไม่ควรเกิน 10M',
         ]);
-    }
 
-    /**
-     * Create a new user instance after a valid registration.
-     *
-     * @param  array  $data
-     * @return \App\User
-     */
-    protected function create(array $data)
-    {
-        return CreateUser::created($data);
+        if ($validator->fails()) {
+            Session::flash('error', $validator->messages()->first());
+            return redirect()->back();
+        }
+        
+        $num_user = User::where('type','Owner')->count();
+
+        $user_insert['prefix_id'] = $request->input('prefix_id');
+        $user_insert['name'] = $request->input('name');
+        $user_insert['surname'] = $request->input('surname');
+        $user_insert['phone'] = $request->input('phone');
+        $user_insert['office_id'] = $request->input('office_id');
+        $user_insert['email'] = $request->input('email');
+        $user_insert['password'] = Hash::make($request->input('password'));
+        $user_insert['register_at'] = Carbon::now();
+        $user_insert['profile'] = 'avatar1.jpg';
+
+        if($num_user == 0) {
+            $user_insert['type'] = 'Owner';
+            $user_insert['status'] = 'Active';
+        } else {
+            $user_insert['type'] = 'User';
+            $user_insert['status'] = 'Disabled';
+        }
+        $user = User::create($user_insert);
+
+        if($user) {
+             return '<br/><br/><br/><center><h1>ดำเนินการบันทึกข้อมูลแล้ว <br/>กรุณารอดำเนินการ <br/>โดยผู้ดูแลระบบของท่าน</h></center>';
+        }
+        return '<br/><br/><br/><center><h1><font color="red">เกิดข้อผิดพลาด กรุณาลองใหม่</font></h></center>';
     }
 }

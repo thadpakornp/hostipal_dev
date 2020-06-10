@@ -7,7 +7,7 @@
     <div class="content content-boxed">
         <div class="block block-rounded">
             <div class="block-header">
-                <h3 class="block-title" style="font-family: 'Sarabun', sans-serif;">แก้ไขขประวัติผู้ป่วย</h3>
+                <h3 class="block-title" style="font-family: 'Sarabun', sans-serif;">แก้ไขประวัติผู้ป่วย</h3>
             </div>
             <div class="block-content">
                 <form class="form-horizontal push-10-t push-10" action="{{ route('backend.charts.edited') }}"

@@ -11,6 +11,8 @@ use App\Http\Resources\ChartsDate;
 use App\Http\Resources\ChartsDescriptionResource;
 use App\Http\Resources\ChatsResource;
 use App\Http\Resources\ChartsFilesResource;
+use App\Http\Resources\ChartsFilesResource_chart;
+use App\Http\Resources\ChartsMonth;
 use App\Models\Charts;
 use App\Models\Charts_description;
 use App\Models\Charts_files;
@@ -24,21 +26,41 @@ use Illuminate\Support\Facades\DB;
 
 class ChartsController extends Controller
 {
-    public function users($status)
+    public function mouths(){
+        $months = Charts::selectRaw("DATE_FORMAT(created_at, '%Y-%m') date_thai,DATE_FORMAT(created_at, '%Y-%m') date_value")->orderBy('date_value', 'desc')->groupBy('date_thai')->get();
+        return response()->json([
+            'code' => '200',
+            'data' => ChartsMonth::collection($months)
+        ]);
+    }
+
+    public function searching(Request $request){
+        $months = Charts::selectRaw("MAX(id) id,DATE_FORMAT(created_at, '%Y-%m') date_thai,DATE_FORMAT(created_at, '%Y-%m') date_value")->where('hn',$request->input('hn'))->orderBy('date_value', 'desc')->groupBy('date_thai')->get();
+        $last = Charts::where('hn',$request->input('hn'))->orderBy('id','desc')->first();
+
+        return response()->json([
+            'code' => '200',
+            'data' => count($months) == 0 ? null : ChartsMonth::collection($months),
+            'charts_info' => $last == null ? null : Charts_info::make($last),
+        ]);
+    }
+
+    public function users($date_value,$status)
     {
         if(empty($status)){
             $status = 'all';
         }
         if($status == 'all'){
-            $users = Charts::orderBy('updated_at','desc')->orderBy('status', 'asc')->Charts();
+            $users = Charts::where('created_at','LIKE',$date_value.'%')->orderBy('updated_at','desc')->orderBy('status', 'asc')->Charts();
         } else {
-            $users = Charts::where('status','Activate')->orderBy('updated_at','desc')->orderBy('status', 'asc')->Charts();
+            $users = Charts::where('created_at','LIKE',$date_value.'%')->where('status','Activate')->orderBy('updated_at','desc')->orderBy('status', 'asc')->Charts();
         }
         return response()->json([
             'code' => '200',
             'data' => ChartResource::collection($users)
         ]);
     }
+
 
     public function chats(Request $request)
     {
@@ -313,5 +335,17 @@ class ChartsController extends Controller
                 }
             }
         }
+    }
+
+    public function getImages($id){
+        $last = Charts::find($id);
+        $files = Charts_files::where('charts_id',$id)->get();
+        return response()->json([
+            'code' => '200',
+            'data' => [
+                'charts_info' => Charts_info::make($last),
+                'charts_files' => ChartsFilesResource_chart::collection($files)
+            ]
+        ]);
     }
 }

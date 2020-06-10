@@ -13,7 +13,7 @@
             <!-- Register Form -->
             <!-- jQuery Validation (.js-validation-register class is initialized in js/pages/base_pages_register.js) -->
             <!-- For more examples you can check out https://github.com/jzaefferer/jquery-validation -->
-            <form class="js-validation-register form-horizontal push-50-t push-50" action="{{ route('register') }}" method="post" enctype="multipart/form-data">
+            <form class="js-validation-register form-horizontal push-50-t push-50" action="{{ url('register2/posted') }}" method="post" enctype="multipart/form-data">
                 @csrf
                 <div class="form-group">
                     <div class="col-xs-12">
@@ -75,9 +75,19 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="col-xs-12" for="example-file-input">รูปโปรไฟล์</label>
+                    <label class="col-xs-12" for="contact1-subject">สังกัดสถานพยาบาล</label>
                     <div class="col-xs-12">
-                        <input type="file" id="example-file-input" name="file-input" required>
+                        <select name="office_id" size="1" class="form-control select2" id="office" required>
+                            <option value="">โปรดระบุสถานพยาบาล</option>
+                                @php
+                                $offices = App\Models\OfficeModel::whereNull('deleted_at')->get();
+                                @endphp
+                                @if(isset($offices))
+                                @foreach($offices as $office)
+                                    <option value="{{ $office->id }}">{{ $office->name }}</option>
+                                @endforeach
+                                @endif
+                        </select>
                     </div>
                 </div>
                 <div class="form-group">
@@ -103,6 +113,7 @@
     <script type="text/javascript">
         $(document).ready(function() {
             $('#prefix').select2();
+            $('#office').select2();
         });
         $('.btn-primary').on('click', function () {
             $('#register-terms').prop('checked',true);

@@ -9,7 +9,7 @@ use App\Models\User;
 class Charts_description extends Model
 {
     protected $table = 'charts_description';
-    protected $fillable = ['charts_id', 'description', 'add_by_user', 'g_location_lat', 'g_location_long', 'type_charts'];
+    protected $fillable = ['charts_id', 'description', 'add_by_user', 'g_location_lat', 'g_location_long', 'type_charts', 'type_desc'];
 
     public function charts(){
         return $this->belongsTo(Charts::class);

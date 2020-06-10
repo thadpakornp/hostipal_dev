@@ -19,6 +19,7 @@ class CreateUser
         $user_insert['name'] = $data['name'];
         $user_insert['surname'] = $data['surname'];
         $user_insert['phone'] = $data['phone'];
+        $user_insert['office_id'] = $data['office_id'];
         $user_insert['email'] = $data['email'];
         $user_insert['password'] = Hash::make($data['password']);
         $user_insert['register_at'] = Carbon::now();

@@ -90,8 +90,10 @@ class ChartsController extends Controller
                 $request->file('profile')->move(public_path('assets/img/profiles'), $profile);
                 Resize::Profile($profile);
                 if ($chart->profile != NULL) {
-                    File::delete(public_path('assets/img/profiles/' . $chart->profile));
-                    File::delete(public_path('assets/img/avatars/' . $chart->profile));
+                    if($user->profile != 'avatar1.jpg'){
+                        File::delete(public_path('assets/img/profiles/' . $chart->profile));
+                        File::delete(public_path('assets/img/avatars/' . $chart->profile));
+                    }
                 }
                 $chart->profile = $profile;
             }

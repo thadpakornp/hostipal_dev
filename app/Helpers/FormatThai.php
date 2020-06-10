@@ -29,6 +29,15 @@ class FormatThai
         return "$strDay $strMonthThai $strYear";
     }
 
+    public static function DateThaiChartMouth($strDate)
+    {
+        $strYear = date("Y", strtotime($strDate)) + 543;
+        $strMonth = date("n", strtotime($strDate));
+        $strMonthCut = Array("", "มกราคม", "กุมภาพันธ์", "มีนาคม", "เมษายน", "พฤษภาคม", "มิถุนายน", "กรกฎาคม", "สิงหาคม", "กันยายน", "ตุลาคม", "พฤศจิกายน", "ธันวาคม");
+        $strMonthThai = $strMonthCut[$strMonth];
+        return "$strMonthThai $strYear";
+    }
+
     public static function DateThaiToChat($strDate)
     {
         $strYear = date("Y", strtotime($strDate)) + 543;
