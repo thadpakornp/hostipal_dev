@@ -81,8 +81,12 @@
                             <div class="form-group">
                                 <div class="col-xs-12">
                                     <label for="surname">วัน/เดือน/ปี เกิด</label>
-                                    <input class="form-control" type="text" id="validation-hbd" name="hbd"
-                                           value="{{ $chart->hbd }}">
+                                    @php
+                                    $h = $chart->hbd;
+                                    $hbd = explode('-',$h);
+                                    $dt = Carbon\Carbon::create($hbd[0], $hbd[1], $hbd[2], 0);
+                                    @endphp
+                                    <input class="form-control input-lg" type="text" name="hbd" id="mega-hbd" data-provide="datepicker" data-date-language="th-th" value="{{ date_format($dt->addYears(543),'d/m/Y') }}" required>
                                 </div>
                             </div>
                             <div class="form-group">
@@ -123,12 +127,12 @@
 @endsection
 @section('script_ready')
     $('#prefix-id').select2();
-    $('#validation-hbd').datepicker({
-    language: "th",
-    format: "yyyy-mm-dd"
+    $('.datepicker').datepicker({
+        format: 'yyyy-mm-dd',
     });
 @endsection
 @section('script')
     <script src="{{ asset('assets/js/bootstrap-datepicker.min.js') }}"></script>
-    <script src="{{ asset('assets/locales/bootstrap-datepicker.th.min.js') }}"></script>
+    <script src="{{ asset('assets/bootstrap-datepicker-thai.js') }}"></script>
+    <script src="{{ asset('assets/locales/bootstrap-datepicker.th.js') }}"></script>
 @endsection

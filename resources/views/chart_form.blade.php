@@ -89,8 +89,7 @@
                             <div class="form-group">
                                 <div class="col-xs-6">
                                     <label for="mega-hbd">วันเดือนปี เกิด</label>
-                                    <input class="form-control input-lg" type="text" id="mega-hbd"
-                                           name="hbd" required value="{{ old('bhd') }}" autocomplete="off">
+                                    <input class="form-control input-lg" type="text" name="hbd" id="mega-hbd" data-provide="datepicker" data-date-language="th-th" required>
                                 </div>
                                 <div class="col-xs-6">
                                     <label for="mega-sex">เพศ</label>
@@ -229,7 +228,8 @@
 @section('script')
     <script src="{{ asset('assets/js/plugins/bootstrap-wizard/jquery.bootstrap.wizard.min.js') }}"></script>
     <script src="{{ asset('assets/js/bootstrap-datepicker.min.js') }}"></script>
-    <script src="{{ asset('assets/locales/bootstrap-datepicker.th.min.js') }}"></script>
+    <script src="{{ asset('assets/bootstrap-datepicker-thai.js') }}"></script>
+    <script src="{{ asset('assets/locales/bootstrap-datepicker.th.js') }}"></script>
     <script src="{{ asset('assets/js/plugins/dropzonejs/dropzone.min.js') }}"></script>
     <script type="text/javascript">
         Dropzone.options.dropzone =
@@ -353,7 +353,6 @@
         function iCheck(types, id) {
             if(types == 'idcard'){
                 if (id.length > 12) {
-                    console.log(id);
                     $.ajax({
                         url: "{{ route('backend.charts.i.check') }}",
                         type: "POST",
@@ -436,7 +435,7 @@
                                 $('#old_id').val(res.info.id);
                                 if (res.info.hbd != null) {
                                     var hdb = res.info.hbd.split('-');
-                                    $('#mega-hbd').datepicker("setDate", new Date(hdb[0], hdb[1], hdb[2]));
+                                    $('#mega-hbd').datepicker("setDate", new Date(hdb[0]+543, hdb[1], hdb[2]));
                                 }
                                 if (res.info.sex != null) {
                                     var $radios = $('input:radio[name=sex]');
@@ -457,8 +456,7 @@
 @endsection
 @section('script_ready')
     $('#mega-prefix').select2();
-    $('#mega-hbd').datepicker({
-    language: "th",
-    format: "yyyy-mm-dd"
+    $('.datepicker').datepicker({
+        format: 'yyyy-mm-dd'
     });
 @endsection

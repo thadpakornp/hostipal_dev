@@ -83,7 +83,21 @@ class ChartsController extends Controller
         if (empty($chart)) {
             return redirect()->back()->with(['error' => 'ไม่พบข้อมูล']);
         }
-        if ($chart->update($request->all())) {
+
+        $hbd = explode('/',$request->input('hbd'));
+        $dt = Carbon::create($hbd[2], $hbd[1], $hbd[0], 0);
+
+        $chart['hn'] = $request->input('hn');
+        $chart['prefix_id'] = $request->input('prefix_id');
+        $chart['name'] = $request->input('name');
+        $chart['surname'] = $request->input('surname');
+        $chart['idcard'] = $request->input('idcard');
+        $chart['sex'] = $request->input('sex');
+        $chart['hbd'] = $dt->subYears(543);
+        $chart['phone'] = $request->input('phone');
+        $chart['address'] = $request->input('address');
+
+        if ($chart->save()) {
             $chart->status = 'Activate';
             if ($request->hasFile('profile')) {
                 $profile = time() . '.' . $request->file('profile')->extension();
@@ -109,12 +123,15 @@ class ChartsController extends Controller
         if (strlen($request->input('id_card')) != 13) {
             return redirect()->back()->with(['error' => 'หมายเลขบัตรประชาชนไม่ถูกต้อง']);
         }
+        $hbd = explode('/',$request->input('hbd'));
+        $dt = Carbon::create($hbd[2], $hbd[1], $hbd[0], 0);
+
         $chart_insert['prefix_id'] = $request->input('prefix_id');
         $chart_insert['name'] = $request->input('name');
         $chart_insert['surname'] = $request->input('surname');
         $chart_insert['idcard'] = $request->input('id_card');
         $chart_insert['sex'] = $request->input('sex');
-        $chart_insert['hbd'] = $request->input('hbd');
+        $chart_insert['hbd'] = $dt->subYears(543);
         $chart_insert['phone'] = $request->input('phone');
         $chart_insert['address'] = $request->input('address');
         $chart_insert['hn'] = $request->input('hn');

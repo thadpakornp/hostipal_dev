@@ -28,7 +28,7 @@ class ChartRequest extends FormRequest
             'name' => ['required'],
             'surname' => ['required'],
             'id_card' => ['required', 'numeric'],
-            'hbd' => ['required', 'date'],
+            'hbd' => ['required'],
             'address' => ['required']
         ];
     }
