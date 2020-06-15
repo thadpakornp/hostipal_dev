@@ -13,7 +13,7 @@ Route::group(['prefix' => 'v1', 'as' => 'v1.'], function () {
     Route::get('checkVersion', function() {
         return response()->json([
             'code' => '200',
-            'data' => '3.2.1'
+            'data' => '3.2.2'
         ]); 
     });
     Route::get('prefix', ['as' => 'prefix', 'uses' => 'Api\RegisterController@prefix']);

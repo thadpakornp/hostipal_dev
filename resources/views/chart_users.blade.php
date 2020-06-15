@@ -119,9 +119,6 @@
                                                     <a type="button" class="btn btn-sm btn-warning" data-toggle="tooltip" title="แก้ไขประวัติผู้ป่วย" href="{{ route('backend.charts.edit',encrypt($user->id)) }}">
                                                         <i class="fa fa-edit"></i>
                                 </a>
-                                                    <a type="button" class="btn btn-sm btn-success" data-toggle="tooltip" title="พิมพ์ประวัติผู้ป่วย">
-                                                        <i class="fa fa-print"></i>
-                                </a>
                                                     <a type="button" class="btn btn-sm btn-primary" data-toggle="tooltip" title="แฟ้มประวัติผู้ป่วย" href="{{ route('backend.charts.feeds',encrypt($user->idcard)) }}">
                                                         <i class="fa fa-id-card-o"></i>
                                 </a>
@@ -211,9 +208,6 @@
                                     <div class="btn-group">
                                                     <a type="button" class="btn btn-sm btn-warning" data-toggle="tooltip" title="แก้ไขประวัติผู้ป่วย" href="{{ route('backend.charts.edit',encrypt($user->id)) }}">
                                                         <i class="fa fa-edit"></i>
-                                </a>
-                                                    <a type="button" class="btn btn-sm btn-success" data-toggle="tooltip" title="พิมพ์ประวัติผู้ป่วย">
-                                                        <i class="fa fa-print"></i>
                                 </a>
                                                     <a type="button" class="btn btn-sm btn-primary" data-toggle="tooltip" title="แฟ้มประวัติผู้ป่วย" href="{{ route('backend.charts.feeds',encrypt($user->idcard)) }}">
                                                         <i class="fa fa-id-card-o"></i>
