@@ -35,7 +35,7 @@
     <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('apple-icon-180x180.png') }}">
     <link rel="icon" type="image/png" sizes="192x192"  href="{{ asset('android-icon-192x192.png') }}">
     <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('favicon-32x32.png') }}">
-    <link rel="icon" type="image/png" sizes="96x96" href="{{ asset('favicon-96x96.png"') }}">
+    <link rel="icon" type="image/png" sizes="96x96" href="{{ asset('favicon-96x96.png') }}">
     <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('favicon-16x16.png') }}">
     <link rel="manifest" href="{{ asset('manifest.json') }}">
     <meta name="msapplication-TileColor" content="#ffffff">

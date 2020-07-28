@@ -16,7 +16,7 @@ Route::get('terms', function() {
     return view('terms');
 });
 Route::get('/', function () {
-    return redirect()->route('backend.index');
+    return view('landing.index');
 });
 Route::get('/register2', 'Auth\RegisterController2@index');
 Route::post('/register2/posted', 'Auth\RegisterController2@posted');
