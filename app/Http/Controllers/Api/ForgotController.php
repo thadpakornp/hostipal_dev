@@ -20,6 +20,6 @@ class ForgotController extends Controller
 
         return $response == Password::RESET_LINK_SENT
             ? response()->json(['code' => '200', 'data' => 'ส่งลิ้งก์เปลี่ยนรหัสผ่านทางอีเมลที่ลงทะเบียนแล้ว'])
-            : response()->json(['code' => '101', 'data' => 'ไม่สามารถรีเซ็นรหัสผ่านได้']);
+            : response()->json(['code' => '101', 'data' => 'ไม่สามารถรีเซ็ตรหัสผ่านได้']);
     }
 }

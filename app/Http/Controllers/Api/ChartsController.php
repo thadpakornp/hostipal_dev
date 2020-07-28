@@ -35,7 +35,7 @@ class ChartsController extends Controller
     }
 
     public function searching(Request $request){
-        $months = Charts::selectRaw("MAX(id) id,DATE_FORMAT(created_at, '%Y-%m') date_thai,DATE_FORMAT(created_at, '%Y-%m') date_value")->where('hn',$request->input('hn'))->orderBy('date_value', 'desc')->groupBy('date_thai')->get();
+        $months = Charts::selectRaw("MAX(id) id,DATE_FORMAT(created_at, '%Y-%m') date_thai,DATE_FORMAT(created_at, '%Y-%m') date_value")->where('hn',$request->input('hn'))->whereNull('deleted_at')->orderBy('date_value', 'desc')->groupBy('date_thai')->get();
         $last = Charts::where('hn',$request->input('hn'))->orderBy('id','desc')->first();
 
         return response()->json([

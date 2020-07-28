@@ -8,7 +8,7 @@
     </head>
     <body>
     <strong>Privacy Policy</strong> <p>
-                   IMATTHIO Company Limited, Thailand built the Surat Stroke Fast Track app as
+                   IMATTHIO Company Limited, Thailand built the Stroke Fast Track System app as
                   a Free app. This SERVICE is provided by
                    IMATTHIO Company Limited, Thailand at no cost and is intended for use as
                   is.
@@ -25,7 +25,7 @@
                 </p> <p>
                   The terms used in this Privacy Policy have the same meanings
                   as in our Terms and Conditions, which is accessible at
-                  Surat Stroke Fast Track unless otherwise defined in this Privacy Policy.
+                  Stroke Fast Track System unless otherwise defined in this Privacy Policy.
                 </p> <p><strong>Information Collection and Use</strong></p> <p>
                   For a better experience, while using our Service, we
                   may require you to provide us with certain personally
