@@ -47,14 +47,14 @@ class ChartsController extends Controller
     public function feeds($idcard)
     {
         $user = Charts::with(['charts_description'])->where('charts.idcard', decrypt($idcard))->latest()->first();
-        $users = Charts::where('idcard', decrypt($idcard))->orderBy('created_at', 'desc')->get();
+        $users = Charts::where('idcard', decrypt($idcard))->whereNull('deleted_at')->orderBy('created_at', 'desc')->get();
         return view('chart_feeds', compact('user', 'users'));
     }
 
     public function feed($id)
     {
         $user = Charts::with(['charts_description'])->where('charts.id', decrypt($id))->latest()->first();
-        $users = Charts::where('idcard', $user->idcard)->orderBy('created_at', 'desc')->get();
+        $users = Charts::where('idcard', $user->idcard)->whereNull('deleted_at')->orderBy('created_at', 'desc')->get();
         return view('chart_feeds', compact('user', 'users'));
     }
 
@@ -292,21 +292,6 @@ class ChartsController extends Controller
         } elseif ($desc->type_charts == 0) {   
             return response()->json(['error' => 'ประเภทไม่ถูกต้อง'], 404);
         } else {
-            $files = Charts_files::where('charts_desc_id', $desc->id);
-            if ($files->count() > 0) {
-                $file = Charts_files::where('charts_desc_id', $desc->id)->update(['deleted_at' => Carbon::now()]);
-                if ($file) {
-                    $desc->deleted_at = Carbon::now();
-                    if ($desc->save()) {
-                        foreach ($files->get() as $f) {
-                            File::delete(public_path('assets/img/photos/' . $f->files));
-                        }
-                        return response()->json(['success' => 'ลบเรียบร้อยแล้ว'], 200);
-                    }
-                    return response()->json(['error' => 'ไม่สามารถลบรายละเอียดได้'], 404);
-                }
-                return response()->json(['error' => 'ไม่สามารถลบไฟล์ได้'], 404);
-            }
             $desc->deleted_at = Carbon::now();
             if ($desc->save()) {
                 return response()->json(['id' => $desc->id], 200);
@@ -561,7 +546,7 @@ class ChartsController extends Controller
                 $table .= '</td><td class="text-center"><a target="_blank" href="http://maps.google.com/?q=' . $chart->g_location_lat . ',' . $chart->g_location_long . '">' . $chart->g_location_lat . ' ' . $chart->g_location_long . '</a></td><td class="text-center">' . $add_by . '</td><td class="text-center">' . FormatThai::DateThai($chart->created_at) . '</td><td class="text-center"><a href="#" class="btn btn-danger" onclick="confirmDelete('.$chart_desc_id.')">ลบ</a></td></tr>';
             }
         } else {
-            $table = '<tr><td class="text-center text-danger" colspan="4">ไม่พบข้อมูล</td></tr>';
+            $table = '<tr><td class="text-center text-danger" colspan="6">ไม่พบข้อมูล</td></tr>';
         }
         return response()->json([
             'info' => $table

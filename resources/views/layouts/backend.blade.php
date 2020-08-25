@@ -7,7 +7,7 @@
 <head>
     <meta charset="utf-8">
 
-    <title>Surat Stroke Fast Track : IMATTHIO Company Limited</title>
+    <title>Stroke Fast Track System : IMATTHIO Company Limited</title>
 
     <meta name="description" content="IMATTHIO Company Limited">
     <meta name="author" content="IMATTHIO Company Limited">
@@ -468,7 +468,7 @@
                 <li class="header-content">
                     <a class="h5" href="{{ route('backend.index') }}">
                         <!-- logo -->
-                        <img src="{{ asset('android-icon-192x192.png') }}" width="45"> Surat Stroke Fast Track
+                        <img src="{{ asset('android-icon-192x192.png') }}" width="45"> Stroke Fast Track System
                     </a>
                 </li>
             </ul>

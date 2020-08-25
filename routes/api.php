@@ -50,6 +50,14 @@ Route::group(['prefix' => 'v1', 'as' => 'v1.'], function () {
             Route::post('/chat/uploaded', ['as' => 'chatUpload', 'uses' => 'Api\ChartsController@chatUpload']);
             Route::post('/chat/lastProcess', ['as' => 'lastProcess', 'uses' => 'Api\ChartsController@lastProcessChat']);
             Route::post('/chat/images', ['as' => 'chatimages', 'uses' => 'Api\ChartsController@chatimages']);
+            Route::post('/chat/images/delete', ['as' => 'chatimages.delete', 'uses' => 'Api\ChartsController@chatimagesdelete']);
+            Route::post('/chat/images/albums/delete', ['as' => 'chatimages.delete.albums', 'uses' => 'Api\ChartsController@chatimagesalbumsdelete']);
+            Route::post('/chat/albums/delete', ['as' => 'chatalbums.delete', 'uses' => 'Api\ChartsController@chatalbumsdelete']);
+
+            Route::get('/albums', ['as' => 'albums', 'uses' => 'Api\ChartsController@getalbums']);
+            Route::get('/albums/id/{id}', ['as' => 'albums.id', 'uses' => 'Api\ChartsController@album']);
+            Route::post('/albums/edit/name', ['as' => 'albums.edit.name', 'uses' => 'Api\ChartsController@albumedit']);
+            Route::post('/albums/upload', ['as' => 'albums.upload', 'uses' => 'Api\ChartsController@albumupload']);
         });
 
         Route::group(['prefix' => 'manage', 'as' => 'manage.'], function () {

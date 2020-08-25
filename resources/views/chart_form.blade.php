@@ -153,7 +153,7 @@
                             <div class="col-sm-12">
                                 <div class="form-group">
                                     <div class="col-xs-12">
-                                        <label>โหลดข้อมูลจากแอพ (สามารถคลิกที่รายละเอียดเพื่อผู้เอกสารประกอบได้)</label>
+                                        <label>โหลดข้อมูลจากแอพ (สามารถคลิกที่รายละเอียดดูเอกสารประกอบได้)</label>
                                         <table class="table table-hover table-bordered table-responsive" width="100%">
                                             <thead>
                                             <th width="5%">เลือก</th>

@@ -19,6 +19,7 @@ class ChartsFilesResource extends JsonResource
     public function toArray($request)
     {
         return [
+            'id' => $this->id,
             'files' => asset('assets/img/temnails/' . $this->files),
             'type_files' => $this->type_files,
         ];

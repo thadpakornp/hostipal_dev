@@ -11,19 +11,18 @@
     <!-- Place favicon.ico in the root directory -->
 
     <!-- CSS here -->
-    <link rel="stylesheet" href="css/bootstrap.min.css">
-    <link rel="stylesheet" href="css/owl.carousel.min.css">
-    <link rel="stylesheet" href="css/magnific-popup.css">
-    <link rel="stylesheet" href="css/font-awesome.min.css">
-    <link rel="stylesheet" href="css/themify-icons.css">
-    <link rel="stylesheet" href="css/nice-select.css">
-    <link rel="stylesheet" href="css/flaticon.css">
-    <link rel="stylesheet" href="css/gijgo.css">
-    <link rel="stylesheet" href="css/animate.min.css">
-    <link rel="stylesheet" href="css/slick.css">
-    <link rel="stylesheet" href="css/slicknav.css">
-    <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="css/responsive.css">
+    <link rel="stylesheet" href="{{ asset('landing/css/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('landing/css/owl.carousel.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('landing/css/magnific-popup.css') }}">
+    <link rel="stylesheet" href="{{ asset('landing/css/font-awesome.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('landing/css/themify-icons.css') }}">
+    <link rel="stylesheet" href="{{ asset('landing/css/nice-select.css') }}">
+    <link rel="stylesheet" href="{{ asset('landing/css/flaticon.css') }}">
+    <link rel="stylesheet" href="{{ asset('landing/css/gijgo.css') }}">
+    <link rel="stylesheet" href="{{ asset('landing/css/animate.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('landing/css/slick.css') }}">
+    <link rel="stylesheet" href="{{ asset('landing/css/slicknav.css') }}">
+    <link rel="stylesheet" href="{{ asset('landing/css/style.css') }}">
 
     <link rel="apple-touch-icon" sizes="57x57" href="{{ asset('apple-icon-57x57.png') }}">
     <link rel="apple-touch-icon" sizes="60x60" href="{{ asset('apple-icon-60x60.png') }}">
@@ -58,7 +57,7 @@
                         <div class="col-xl-3 col-lg-2">
                             <div class="logo">
                                 <a href="{{ url('/') }}">
-                                    <img src="img/logo.png" width="36" height="36" alt="">
+                                    <img src="{{ asset('landing/img/logo.png') }}" width="36" height="36" alt="">
                                 </a>
                             </div>
                         </div>
@@ -70,7 +69,7 @@
                         <div class="col-xl-3 col-lg-3 d-none d-lg-block">
                             <div class="Appointment">
                                 <div class="book_btn d-none d-lg-block">
-                                    <a  href="{{ route('login') }}">Login</a>
+                                    <a  href="{{ route('backend.index') }}">@if(auth()->check()) Backend @else Login @endif</a>
                                 </div>
                             </div>
                         </div>
@@ -98,7 +97,7 @@
                     </div>
                     <div class="col-xl-5 col-md-6">
                         <div class="phone_thumb wow fadeInDown" data-wow-duration="1.1s" data-wow-delay=".2s">
-                            <img src="img/ilstrator/phone.png" width="360" height="680" alt="">
+                            <img src="{{ asset('landing/img/ilstrator/phone.png') }}" width="360" height="680" alt="">
                         </div>
                     </div>
                 </div>
@@ -132,7 +131,7 @@
                 <div class="col-lg-4 col-md-4  wow fadeInUp" data-wow-duration=".7s" data-wow-delay=".5s">
                     <div class="single_service">
                         <h3>ห้องสนทนา</h3>
-                        <p>ผู้ใช้งานสามารถพูดคุยและสามารถปัญหาได้ผ่านทางหน้าแชทซึ่งมีผู้เชี่ยวชาญคอยให้คำตอบ</p>
+                        <p>ผู้ใช้งานสามารถพูดคุยและสอบถามปัญหาได้ผ่านทางหน้าแชทซึ่งมีผู้เชี่ยวชาญคอยให้คำตอบ</p>
                     </div>
                 </div>
 
@@ -169,10 +168,10 @@
                 <div class="col-xl-5 col-md-12 col-lg-6">
                     <div class="app_download wow fadeInDown" data-wow-duration="1s" data-wow-delay=".1s">
                         <a href="#" >
-                                <img src="img/ilstrator/app.svg" alt="">
+                                <img src="{{ asset('landing/img/ilstrator/app.svg') }}" alt="">
                         </a>
                         <a href="#">
-                                <img src="img/ilstrator/play.svg" alt="">
+                                <img src="{{ asset('landing/img/ilstrator/play.svg') }}" alt="">
                         </a>
                         
                     </div>
@@ -190,10 +189,10 @@
                 <div class="row">
                     <div class="col-xl-12">
                         <p class="copy_right text-center">
-                            <img src="img/i_logo.png" width="150" height="32">
+                            <img src="{{ asset('landing/img/i_logo.png') }}" width="150" height="32">
  <br/> Imatthio Company Limited
 592/110 Borromrachonnanee Road Thawi Watthana, Bangkok Thailand 10170 <br/>
-Phone : +66 064 879 3236, +66 077 915 600
+Phone : +66 077 915 600
 Email : info@imatthio.com <br/>Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved
                         </p>
                     </div>
@@ -204,33 +203,33 @@ Email : info@imatthio.com <br/>Copyright &copy;<script>document.write(new Date()
     <!--/ footer end  -->
 
     <!-- JS here -->
-    <script src="js/vendor/modernizr-3.5.0.min.js"></script>
-    <script src="js/vendor/jquery-1.12.4.min.js"></script>
-    <script src="js/popper.min.js"></script>
-    <script src="js/bootstrap.min.js"></script>
-    <script src="js/owl.carousel.min.js"></script>
-    <script src="js/isotope.pkgd.min.js"></script>
-    <script src="js/ajax-form.js"></script>
-    <script src="js/waypoints.min.js"></script>
-    <script src="js/jquery.counterup.min.js"></script>
-    <script src="js/imagesloaded.pkgd.min.js"></script>
-    <script src="js/scrollIt.js"></script>
-    <script src="js/jquery.scrollUp.min.js"></script>
-    <script src="js/wow.min.js"></script>
-    <script src="js/nice-select.min.js"></script>
-    <script src="js/jquery.slicknav.min.js"></script>
-    <script src="js/jquery.magnific-popup.min.js"></script>
-    <script src="js/plugins.js"></script>
-    <script src="js/gijgo.min.js"></script>
+    <script src="{{ asset('landing/js/vendor/modernizr-3.5.0.min.js') }}"></script>
+    <script src="{{ asset('landing/js/vendor/jquery-1.12.4.min.js') }}"></script>
+    <script src="{{ asset('landing/js/popper.min.js') }}"></script>
+    <script src="{{ asset('landing/js/bootstrap.min.js') }}"></script>
+    <script src="{{ asset('landing/js/owl.carousel.min.js') }}"></script>
+    <script src="{{ asset('landing/js/isotope.pkgd.min.js') }}"></script>
+    <script src="{{ asset('landing/js/ajax-form.js') }}"></script>
+    <script src="{{ asset('landing/js/waypoints.min.js') }}"></script>
+    <script src="{{ asset('landing/js/jquery.counterup.min.js') }}"></script>
+    <script src="{{ asset('landing/js/imagesloaded.pkgd.min.js') }}"></script>
+    <script src="{{ asset('landing/js/scrollIt.js') }}"></script>
+    <script src="{{ asset('landing/js/jquery.scrollUp.min.js') }}"></script>
+    <script src="{{ asset('landing/js/wow.min.js') }}"></script>
+    <script src="{{ asset('landing/js/nice-select.min.js') }}"></script>
+    <script src="{{ asset('landing/js/jquery.slicknav.min.js') }}"></script>
+    <script src="{{ asset('landing/js/jquery.magnific-popup.min.js') }}"></script>
+    <script src="{{ asset('landing/js/plugins.js') }}"></script>
+    <script src="{{ asset('landing/js/gijgo.min.js') }}"></script>
 
     <!--contact js-->
-    <script src="js/contact.js"></script>
-    <script src="js/jquery.ajaxchimp.min.js"></script>
-    <script src="js/jquery.form.js"></script>
-    <script src="js/jquery.validate.min.js"></script>
-    <script src="js/mail-script.js"></script>
+    <script src="{{ asset('landing/js/contact.js') }}"></script>
+    <script src="{{ asset('landing/js/jquery.ajaxchimp.min.js') }}"></script>
+    <script src="{{ asset('landing/js/jquery.form.js') }}"></script>
+    <script src="{{ asset('landing/js/jquery.validate.min.js') }}"></script>
+    <script src="{{ asset('landing/js/mail-script.js') }}"></script>
 
-    <script src="js/main.js"></script>
+    <script src="{{ asset('landing/js/main.js') }}"></script>
 </body>
 
 </html>

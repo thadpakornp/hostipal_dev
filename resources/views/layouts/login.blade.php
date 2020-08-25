@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
 
-    <title>Surat Stroke Fast Track : IMATTHIO Company Limited</title>
+    <title>Stroke Fast Track System : IMATTHIO Company Limited</title>
 
     <meta name="description" content="IMATTHIO Company Limited">
     <meta name="author" content="IMATTHIO Company Limited">

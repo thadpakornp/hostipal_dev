@@ -13,6 +13,8 @@ use App\Http\Resources\ChatsResource;
 use App\Http\Resources\ChartsFilesResource;
 use App\Http\Resources\ChartsFilesResource_chart;
 use App\Http\Resources\ChartsMonth;
+use App\Http\Resources\Albums;
+use App\Http\Resources\Album;
 use App\Models\Charts;
 use App\Models\Charts_description;
 use App\Models\Charts_files;
@@ -35,7 +37,7 @@ class ChartsController extends Controller
     }
 
     public function searching(Request $request){
-        $months = Charts::selectRaw("MAX(id) id,DATE_FORMAT(created_at, '%Y-%m') date_thai,DATE_FORMAT(created_at, '%Y-%m') date_value")->where('hn',$request->input('hn'))->whereNull('deleted_at')->orderBy('date_value', 'desc')->groupBy('date_thai')->get();
+        $months = Charts::selectRaw("MAX(id) id,DATE_FORMAT(created_at, '%Y-%m') date_thai,DATE_FORMAT(created_at, '%Y-%m') date_value")->where('hn',$request->input('hn'))->whereNull('deleted_at')->orderBy('date_value', 'desc')->groupBy('date_value')->get();
         $last = Charts::where('hn',$request->input('hn'))->orderBy('id','desc')->first();
 
         return response()->json([
@@ -61,20 +63,153 @@ class ChartsController extends Controller
         ]);
     }
 
+    public function getalbums(){
+        $albums = Charts_description::where('status_chat','0')->where('type_desc','1')->orderBy('updated_at','DESC')->get(['id','description']);
+        return response()->json([
+            'code' => '200',
+            'data' => Albums::collection($albums)
+        ]);
+    }
+
+    public function album($id){
+        $albums = Charts_files::where('charts_desc_id',$id)->whereNull('deleted_at')->whereNotIn('type_files',['mp4','mov','mp3'])->get(['id','files']);
+        return response()->json([
+            'code' => '200',
+            'data' => Album::collection($albums)
+        ]);
+    }
+
+    public function albumedit(Request $request)
+    {
+        $albumedit = Charts_description::where('id',$request->input('id'))->update(['description' => $request->input('description')]);
+        if($albumedit){
+            return response()->json([
+                'code' => '200',
+                'data' => 'แก้ไขชื่ออัลบั้มเรียบร้อยแล้ว'
+            ]);
+        } else {
+            return response()->json([
+                'code' => '201',
+                'data' => 'การแก้ไขชื่ออัลบั้มล้มเหลว'
+            ]);
+        }
+    }
+
 
     public function chats(Request $request)
     {
         return response()->json([
             'code' => '200',
-            'data' => ChatsResource::collection(Charts_description::Getchats()->where('type_charts',1)->orderBy('created_at', 'asc')->get()),
+            'data' => ChatsResource::collection(Charts_description::Getchats()->where('type_charts',1)->where('status_chat','0')->orderBy('created_at', 'asc')->get()),
         ]);
+    }
+
+    public function chatimagesdelete(Request $request)
+    {
+        $desc = Charts_description::find($request->input('id'));
+        $desc->deleted_at = Carbon::now();
+        $desc->status_chat = '1';
+        if($desc->save()){
+            return response()->json([
+                'code' => '200',
+                'data' => 'ลบรูปภาพเรียบร้อยแล้ว'
+            ]);
+        } else {
+            return response()->json([
+                'code' => '201',
+                'data' => 'ลบรูปภาพล้มเหลว'
+            ]);
+        }
+    }
+
+    public function chatalbumsdelete(Request $request)
+    {
+        $desc = Charts_description::find($request->input('id'));
+        $desc->deleted_at = Carbon::now();
+        $desc->status_chat = '1';
+        if($desc->save()){
+            return response()->json([
+                'code' => '200',
+                'data' => 'ลบอัลบั้มเรียบร้อยแล้ว'
+            ]);
+        } else {
+            return response()->json([
+                'code' => '201',
+                'data' => 'ลบอัลบั้มล้มเหลว'
+            ]);
+        }
+    }
+
+    public function chatimagesalbumsdelete(Request $request)
+    {
+        $desc = Charts_files::find($request->input('id'));
+
+        $descs = Charts_files::where('charts_desc_id',$desc->charts_desc_id)->whereNull('deleted_at')->count();
+        if($descs == 1){
+            $desc_delete = Charts_description::find($desc->charts_desc_id);
+            $desc_delete->deleted_at = Carbon::now();
+            $desc_delete->status_chat = '1';
+            $desc_delete->save();
+        }
+
+        $desc->deleted_at = Carbon::now();
+        if($desc->save()){
+            
+            return response()->json([
+                'code' => '200',
+                'data' => 'ลบรูปภาพเรียบร้อยแล้ว'
+            ]);
+        } else {
+            return response()->json([
+                'code' => '201',
+                'data' => 'ลบรูปภาพล้มเหลว'
+            ]);
+        }
     }
 
     public function chatimages(Request $request){
         return response()->json([
             'code' => '200',
-            'data' => ChartsFilesResource::collection(Charts_files::where('charts_desc_id',$request->input('id'))->get()),
+            'data' => ChartsFilesResource::collection(Charts_files::where('charts_desc_id',$request->input('id'))->whereNull('deleted_at')->get()),
         ]); 
+    }
+
+    public function albumupload(Request $request)
+    {
+        if ($request->hasFile('files')) {
+            $files = $request->file('files');
+            $imageName = date('Ymd') . Str::random(8) . time() . '.' . $files->getClientOriginalExtension();
+            $files->move(public_path('assets/img/photos'), $imageName);
+
+            $file = Charts_files::create([
+                'charts_desc_id' => $request->input('id'),
+                'add_by_user' => Auth::guard('api')->user()->id,
+                'files' => $imageName,
+                'type_files' => $files->getClientOriginalExtension()
+            ]);
+
+            if($file){
+                $mimeTypes=['image/jpeg','image/gif','image/png','image/bmp','image/svg+xml'];
+                $mimeContentType = mime_content_type(public_path('assets/img/photos/'.$imageName));
+                if(in_array($mimeContentType, $mimeTypes) ){
+                    Resize::uploads($imageName);
+                }
+                return response()->json([
+                    'code' => '200',
+                    'data' => 'อัปโหลดเรียบร้อยแล้ว',
+                ]);
+            }
+
+            return response()->json([
+                'code' => '200',
+                'data' => 'อัปโหลดล้มเหลว'
+            ]);
+            
+        }
+        return response()->json([
+            'code' => '200',
+            'data' => 'อัปโหลดล้มเหลว'
+        ]);
     }
 
     public function chatUpload(Request $request){
@@ -243,11 +378,32 @@ class ChartsController extends Controller
         $charts->status = 'Deactivate';
         $charts->save();
 
-        Charts_description::create([
+        $id = Charts_description::create([
             'charts_id' => $charts->id,
-            'description' => 'สิ้นสุดการรักษาหรือกระบวนการรักษาเสร็จสิ้นแล้ว',
+            'description' => 'DISCHANGE SUMMARY',
             'add_by_user' => Auth::guard('api')->user()->id,
-        ]);
+        ])->id;
+
+        if ($request->hasFile('files')) {
+            foreach ($request->file('files') as $file) {
+                $imageName = date('Ymd') . Str::random(8) . time() . '.' . $file->getClientOriginalExtension();
+                $file->move(public_path('assets/img/photos'), $imageName);
+
+                $mimeTypes=['image/jpeg','image/gif','image/png','image/bmp','image/svg+xml'];
+                $mimeContentType = mime_content_type(public_path('assets/img/photos/'.$imageName));
+                if(in_array($mimeContentType, $mimeTypes) ){
+                    Resize::uploads($imageName);
+                }
+
+                Charts_files::create([
+                    'charts_id' => $charts->id,
+                    'charts_desc_id' => $id,
+                    'add_by_user' => Auth::guard('api')->user()->id,
+                    'files' => $imageName,
+                    'type_files' => $file->getClientOriginalExtension()
+                ]);
+            }
+        }
 
         return response()->json([
             'code' => '200',
@@ -339,7 +495,7 @@ class ChartsController extends Controller
 
     public function getImages($id){
         $last = Charts::find($id);
-        $files = Charts_files::where('charts_id',$id)->get();
+        $files = Charts_files::where('charts_id',$id)->whereNull('deleted_at')->get();
         return response()->json([
             'code' => '200',
             'data' => [
